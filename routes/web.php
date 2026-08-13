@@ -8,7 +8,13 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+
+    return match ($user->role) {
+        'doctor' => redirect()->route('doctor.dashboard'),
+        'admin' => redirect()->route('admin.dashboard'),
+        default => redirect()->route('patient.dashboard'),
+    };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

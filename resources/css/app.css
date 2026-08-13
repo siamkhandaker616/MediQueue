@@ -1,3 +1,103 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+    MediQueue design tokens.
+    Two palettes, selected by <html data-theme="...">:
+      :root              -> "Blush & Mint" (default)
+      [data-theme=soft]  -> "Softer muted pink"
+    Values are space-separated RGB triplets consumed by Tailwind
+    via rgb(var(--token) / <alpha-value>).
+*/
+
+:root {
+    --canvas: 252 246 249;
+    --surface: 255 255 255;
+    --ink: 63 52 56;
+    --muted: 130 116 123;
+
+    --brand-50: 255 245 248;
+    --brand-100: 251 225 234;
+    --brand-200: 247 201 218;
+    --brand-300: 240 169 196;
+    --brand-400: 230 132 172;
+    --brand-500: 215 94 142;
+    --brand-600: 195 75 121;
+    --brand-700: 166 60 102;
+
+    --accent-100: 223 243 236;
+    --accent-200: 190 233 220;
+    --accent-300: 166 224 206;
+    --accent-400: 127 209 187;
+    --accent-500: 95 185 164;
+    --accent-600: 74 158 139;
+    --accent-700: 58 131 115;
+}
+
+[data-theme="soft"] {
+    --canvas: 253 244 248;
+    --ink: 74 58 66;
+    --muted: 148 130 140;
+
+    --brand-50: 253 242 247;
+    --brand-100: 248 226 236;
+    --brand-200: 250 214 228;
+    --brand-300: 243 189 213;
+    --brand-400: 222 161 190;
+    --brand-500: 201 134 159;
+    --brand-600: 176 111 139;
+    --brand-700: 149 89 122;
+
+    --accent-100: 238 243 234;
+    --accent-200: 214 228 203;
+    --accent-300: 198 214 184;
+    --accent-400: 174 197 156;
+    --accent-500: 147 175 130;
+    --accent-600: 122 151 107;
+    --accent-700: 99 124 86;
+}
+
+@layer base {
+    body {
+        @apply bg-canvas text-ink antialiased;
+    }
+}
+
+@layer components {
+    .card {
+        @apply rounded-2xl border border-brand-100 bg-surface shadow-sm;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:ring-offset-2;
+    }
+
+    .btn-outline {
+        @apply inline-flex items-center justify-center rounded-lg border border-brand-200 bg-surface px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-200;
+    }
+
+    .badge {
+        @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    }
+
+    .input {
+        @apply w-full rounded-lg border-brand-200 bg-surface text-ink shadow-sm focus:border-brand-400 focus:ring-brand-300;
+    }
+
+    .label {
+        @apply block text-sm font-medium text-ink;
+    }
+
+    .stat-card {
+        @apply card p-5;
+    }
+
+    .table-head {
+        @apply border-b border-brand-100 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted;
+    }
+
+    .table-cell {
+        @apply px-4 py-3 text-sm text-ink;
+    }
+}

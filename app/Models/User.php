@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -33,6 +34,38 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public const ROLES = ['patient', 'doctor', 'admin'];
+
+    public function isPatient(): bool
+    {
+        return $this->role === 'patient';
+    }
+
+    public function isDoctor(): bool
+    {
+        return $this->role === 'doctor';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function doctor(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function medicalProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(PatientMedicalProfile::class, 'patient_id');
+    }
+
+    public function appointments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
 
     /**
      * Get the attributes that should be cast.
