@@ -63,7 +63,10 @@ class DepartmentSeeder extends Seeder
         ];
 
         foreach ($departments as $department) {
-            Department::create($department + ['is_active' => true]);
+            Department::updateOrCreate(
+                ['slug' => $department['slug']],
+                $department + ['is_active' => true]
+            );
         }
     }
 }

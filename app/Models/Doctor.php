@@ -22,6 +22,8 @@ class Doctor extends Model
             'consultation_fee' => 'decimal:2',
             'experience_years' => 'integer',
             'is_active' => 'boolean',
+            'specialties' => 'array',
+            'languages' => 'array',
         ];
     }
 

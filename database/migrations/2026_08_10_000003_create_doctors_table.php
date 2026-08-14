@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('email');
             $table->string('photo')->nullable();
             $table->text('qualifications');
-            $table->string('specialties')->nullable();
+            $table->json('specialties')->nullable();
             $table->unsignedTinyInteger('experience_years')->default(0);
             $table->decimal('consultation_fee', 10, 2)->default(0);
-            $table->string('languages')->nullable();
+            $table->json('languages')->nullable();
             $table->text('bio')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

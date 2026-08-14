@@ -26,7 +26,7 @@ class QueueController extends Controller
         $nowServing = $appointments->where('status', Appointment::STATUS_IN_PROGRESS)->first();
         $nextUp = $appointments->whereIn('status', [Appointment::STATUS_CHECKED_IN, Appointment::STATUS_SCHEDULED])->first();
 
-        return view('doctor.queue', compact('appointments', 'waiting', 'inProgress', 'served', 'nowServing', 'nextUp'));
+        return view('doctor.queue', compact('doctor', 'appointments', 'waiting', 'inProgress', 'served', 'nowServing', 'nextUp'));
     }
 
     public function updateStatus(Request $request, Appointment $appointment): RedirectResponse

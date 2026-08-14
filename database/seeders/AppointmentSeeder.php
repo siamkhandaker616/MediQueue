@@ -28,6 +28,10 @@ class AppointmentSeeder extends Seeder
 
     public function run(): void
     {
+        if (Appointment::exists()) {
+            return;
+        }
+
         $patients = User::where('role', 'patient')->get();
 
         foreach (Doctor::with('department')->get() as $doctor) {

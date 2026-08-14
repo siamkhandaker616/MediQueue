@@ -88,27 +88,31 @@ class DoctorSeeder extends Seeder
         foreach ($doctors as $data) {
             $department = Department::where('slug', $data['department'])->firstOrFail();
 
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => 'password',
-                'role' => 'doctor',
-                'email_verified_at' => now(),
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => 'password',
+                    'role' => 'doctor',
+                    'email_verified_at' => now(),
+                ]
+            );
 
-            Doctor::create([
-                'user_id' => $user->id,
-                'department_id' => $department->id,
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'qualifications' => $data['qualifications'],
-                'specialties' => $data['specialties'],
-                'experience_years' => $data['experience_years'],
-                'consultation_fee' => $data['consultation_fee'],
-                'languages' => $data['languages'],
-                'bio' => $data['bio'],
-                'is_active' => true,
-            ]);
+            Doctor::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'department_id' => $department->id,
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'qualifications' => $data['qualifications'],
+                    'specialties' => $data['specialties'],
+                    'experience_years' => $data['experience_years'],
+                    'consultation_fee' => $data['consultation_fee'],
+                    'languages' => $data['languages'],
+                    'bio' => $data['bio'],
+                    'is_active' => true,
+                ]
+            );
         }
     }
 }
