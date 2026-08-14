@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         View::composer('*', function ($view) {
             if (Auth::check() && ($view->getName() === 'components.layouts.staff' || str_starts_with($view->getName(), 'doctor.') || str_starts_with($view->getName(), 'admin.'))) {
                 $view->with('navigation', $this->navigationFor(Auth::user()));
