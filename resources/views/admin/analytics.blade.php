@@ -100,12 +100,16 @@
             const brand2 = getComputedStyle(document.documentElement).getPropertyValue('--brand-200').trim();
             const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-500').trim();
 
-            const data = @json([
-                'departments' => $byDepartment,
-                'status' => $statusBreakdown,
-                'revenue' => $weeklyRevenue,
-                'hours' => $peakHours,
-            ]);
+            @php
+                $chartData = [
+                    'departments' => $byDepartment,
+                    'status' => $statusBreakdown,
+                    'revenue' => $weeklyRevenue,
+                    'hours' => $peakHours,
+                ];
+            @endphp
+
+            const data = @json($chartData);
 
             const rgb = (v, a = 1) => `rgba(${v.split(' ').join(',')}, ${a})`;
 

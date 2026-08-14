@@ -12,10 +12,10 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
     Route::patch('/reviews/{review}/toggle', [ReviewController::class, 'toggle'])->name('reviews.toggle');
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
-    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments');
+    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
     Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
-    Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors');
+    Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
     Route::patch('/doctors/{doctor}/toggle', [DoctorController::class, 'toggleActive'])->name('doctors.toggle');
 });
