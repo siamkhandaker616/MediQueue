@@ -1,16 +1,18 @@
 <x-layouts.staff>
-    <x-slot name="title">New prescription</x-slot>
+    <x-slot name="title">Edit prescription</x-slot>
 
     @php
-        $patient = $appointment->patient;
+        $appointment = $prescription->appointment;
+        $patient = $prescription->patient;
     @endphp
 
     <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-            <p class="text-sm text-muted">FR-14 · digital prescription</p>
-            <h1 class="text-2xl font-bold tracking-tight">New prescription</h1>
+            <p class="text-sm text-muted">FR-14 · issued {{ $prescription->created_at->format('d M Y, g:i a') }}</p>
+            <h1 class="text-2xl font-bold tracking-tight">Edit prescription</h1>
+            <p class="mt-1 text-xs text-muted">Editable until {{ $prescription->created_at->addMinutes((int) config('mediqueue.prescription_edit_grace_minutes'))->format('g:i a') }}.</p>
         </div>
-        <a href="{{ route('doctor.queue') }}" class="btn-outline">Back to queue</a>
+        <a href="{{ route('doctor.prescriptions.show', $prescription) }}" class="btn-outline">Back to prescription</a>
     </div>
 
     <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -33,11 +35,10 @@
     </div>
 
     @include('doctor.prescriptions._form', [
-        'prescription' => null,
-        'appointment' => $appointment,
-        'action' => route('doctor.prescriptions.store'),
-        'method' => null,
-        'submitLabel' => 'Save prescription',
-        'cancelUrl' => route('doctor.queue'),
+        'prescription' => $prescription,
+        'action' => route('doctor.prescriptions.update', $prescription),
+        'method' => 'PATCH',
+        'submitLabel' => 'Update prescription',
+        'cancelUrl' => route('doctor.prescriptions.show', $prescription),
     ])
 </x-layouts.staff>

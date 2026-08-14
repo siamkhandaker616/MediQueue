@@ -15,6 +15,9 @@ Route::middleware('role:doctor')->group(function () {
     Route::get('/prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
     Route::get('/prescriptions/create/{appointment}', [PrescriptionController::class, 'create'])->name('prescriptions.create');
     Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
+    Route::get('/prescriptions/{prescription}/edit', [PrescriptionController::class, 'edit'])->name('prescriptions.edit');
+    Route::patch('/prescriptions/{prescription}', [PrescriptionController::class, 'update'])->name('prescriptions.update');
+    Route::get('/prescriptions/{prescription}/pdf', [PrescriptionController::class, 'pdf'])->name('prescriptions.pdf');
     Route::get('/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('prescriptions.show');
     Route::get('/patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
 });

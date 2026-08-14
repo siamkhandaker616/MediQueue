@@ -6,8 +6,12 @@
             <p class="text-sm text-muted">FR-15 · issued {{ $prescription->created_at->format('d M Y, g:i a') }}</p>
             <h1 class="text-2xl font-bold tracking-tight">Prescription</h1>
         </div>
-        <div class="flex gap-2">
-            <button onclick="window.print()" class="btn-primary">Print / PDF</button>
+        <div class="flex flex-wrap gap-2">
+            @if ($prescription->is_editable && $prescription->created_at->gte(now()->subMinutes((int) config('mediqueue.prescription_edit_grace_minutes'))))
+                <a href="{{ route('doctor.prescriptions.edit', $prescription) }}" class="btn-outline">Edit</a>
+            @endif
+            <a href="{{ route('doctor.prescriptions.pdf', $prescription) }}" class="btn-primary">Download PDF</a>
+            <button onclick="window.print()" class="btn-outline">Print</button>
             <a href="{{ route('doctor.prescriptions.index') }}" class="btn-outline">History</a>
         </div>
     </div>
@@ -61,6 +65,7 @@
                         <th class="table-head">Dosage</th>
                         <th class="table-head">Frequency</th>
                         <th class="table-head">Duration</th>
+                        <th class="table-head">Instructions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-brand-50">
@@ -70,6 +75,7 @@
                             <td class="table-cell text-muted">{{ $item->dosage }}</td>
                             <td class="table-cell text-muted">{{ $item->frequency }}</td>
                             <td class="table-cell text-muted">{{ $item->duration ?? '—' }}</td>
+                            <td class="table-cell text-muted">{{ $item->instructions ?? '—' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

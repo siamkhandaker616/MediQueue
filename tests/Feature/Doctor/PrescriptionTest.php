@@ -5,6 +5,7 @@ namespace Tests\Feature\Doctor;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Prescription;
+use App\Models\PrescriptionItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -104,6 +105,132 @@ class PrescriptionTest extends TestCase
         $this->actingAs($doctor->user)
             ->get("/doctor/prescriptions/create/{$appointment->id}")
             ->assertForbidden();
+    }
+
+    public function test_doctor_can_view_compose_page(): void
+    {
+        $doctor = $this->makeDoctor();
+        $appointment = Appointment::factory()->create([
+            'doctor_id' => $doctor->id,
+            'department_id' => $doctor->department_id,
+            'status' => Appointment::STATUS_IN_PROGRESS,
+        ]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/create/{$appointment->id}")
+            ->assertOk()
+            ->assertSee($appointment->patient->name);
+    }
+
+    public function test_doctor_can_view_edit_page_within_grace_period(): void
+    {
+        $doctor = $this->makeDoctor();
+        $prescription = Prescription::factory()->create([
+            'doctor_id' => $doctor->id,
+            'diagnosis' => 'Seasonal flu',
+        ]);
+        PrescriptionItem::factory()->count(2)->create(['prescription_id' => $prescription->id]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/{$prescription->id}/edit")
+            ->assertOk()
+            ->assertSee('Seasonal flu')
+            ->assertSee('Update prescription');
+    }
+
+    public function test_doctor_can_update_prescription_within_grace_period(): void
+    {
+        $doctor = $this->makeDoctor();
+        $prescription = Prescription::factory()->create([
+            'doctor_id' => $doctor->id,
+            'diagnosis' => 'Seasonal flu',
+        ]);
+        PrescriptionItem::factory()->count(2)->create(['prescription_id' => $prescription->id]);
+
+        $response = $this->actingAs($doctor->user)->patch("/doctor/prescriptions/{$prescription->id}", [
+            'appointment_id' => $prescription->appointment_id,
+            'diagnosis' => 'Viral fever',
+            'items' => [
+                [
+                    'medication_name' => 'Paracetamol 500mg',
+                    'dosage' => '500 mg',
+                    'frequency' => '1 tablet every 6 hours',
+                    'duration' => '5 days',
+                    'instructions' => 'Take after food',
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect(route('doctor.prescriptions.show', $prescription));
+
+        $this->assertDatabaseHas('prescriptions', [
+            'id' => $prescription->id,
+            'diagnosis' => 'Viral fever',
+        ]);
+        $this->assertCount(1, $prescription->fresh()->items);
+        $this->assertSame('Take after food', $prescription->fresh()->items->first()->instructions);
+    }
+
+    public function test_doctor_cannot_edit_prescription_after_grace_period(): void
+    {
+        $doctor = $this->makeDoctor();
+        $prescription = Prescription::factory()->create([
+            'doctor_id' => $doctor->id,
+            'created_at' => now()->subHours(2),
+        ]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/{$prescription->id}/edit")
+            ->assertForbidden();
+
+        $this->actingAs($doctor->user)
+            ->patch("/doctor/prescriptions/{$prescription->id}", [
+                'appointment_id' => $prescription->appointment_id,
+                'diagnosis' => 'Changed',
+                'items' => [
+                    ['medication_name' => 'X', 'dosage' => '1', 'frequency' => 'daily'],
+                ],
+            ])
+            ->assertForbidden();
+    }
+
+    public function test_doctor_cannot_edit_prescription_that_is_not_editable(): void
+    {
+        $doctor = $this->makeDoctor();
+        $prescription = Prescription::factory()->create([
+            'doctor_id' => $doctor->id,
+            'is_editable' => false,
+        ]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/{$prescription->id}/edit")
+            ->assertForbidden();
+    }
+
+    public function test_doctor_cannot_edit_another_doctors_prescription(): void
+    {
+        $doctor = $this->makeDoctor();
+        $other = $this->makeDoctor();
+        $prescription = Prescription::factory()->create(['doctor_id' => $other->id]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/{$prescription->id}/edit")
+            ->assertForbidden();
+    }
+
+    public function test_doctor_can_download_prescription_pdf(): void
+    {
+        $doctor = $this->makeDoctor();
+        $prescription = Prescription::factory()->create([
+            'doctor_id' => $doctor->id,
+            'diagnosis' => 'Seasonal flu',
+        ]);
+        PrescriptionItem::factory()->count(2)->create(['prescription_id' => $prescription->id]);
+
+        $this->actingAs($doctor->user)
+            ->get("/doctor/prescriptions/{$prescription->id}/pdf")
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf');
     }
 
     private function makeDoctor(): Doctor
