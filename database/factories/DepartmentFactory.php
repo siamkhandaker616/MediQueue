@@ -13,9 +13,7 @@ class DepartmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->randomElement([
-                'Cardiology', 'Dermatology', 'Neurology', 'Pediatrics', 'General Medicine',
-            ]),
+            'name' => $this->faker->unique()->words(2, true),
             'slug' => fn (array $attrs) => str()->slug($attrs['name']),
             'description' => $this->faker->sentence(),
             'fee_range' => '500 - 800',

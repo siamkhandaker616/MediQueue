@@ -14,8 +14,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description');
             $table->string('fee_range');
-            $table->unsignedTinyInteger('floor_number');
-            $table->string('room_number');
+            $table->unsignedTinyInteger('floor_number')->nullable();
+            $table->string('room_number')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

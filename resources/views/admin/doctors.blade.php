@@ -1,9 +1,12 @@
 <x-layouts.staff>
     <x-slot name="title">Doctors</x-slot>
 
-    <div class="mb-6">
-        <p class="text-sm text-muted">Admin · doctor management</p>
-        <h1 class="text-2xl font-bold tracking-tight">Doctors</h1>
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+            <p class="text-sm text-muted">Admin · doctor management</p>
+            <h1 class="text-2xl font-bold tracking-tight">Doctors</h1>
+        </div>
+        <a href="{{ route('admin.doctors.create') }}" class="btn-primary">+ Add doctor</a>
     </div>
 
     @if ($doctors->isEmpty())
@@ -50,13 +53,16 @@
                                     </span>
                                 </td>
                                 <td class="table-cell text-right">
-                                    <form method="POST" action="{{ route('admin.doctors.toggle', $doctor) }}">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button class="btn-outline !px-3 !py-1 !text-xs">
-                                            {{ $doctor->is_active ? 'Deactivate' : 'Activate' }}
-                                        </button>
-                                    </form>
+                                    <div class="flex justify-end gap-2">
+                                        <a href="{{ route('admin.doctors.edit', $doctor) }}" class="btn-outline !px-3 !py-1 !text-xs">Edit</a>
+                                        <form method="POST" action="{{ route('admin.doctors.toggle', $doctor) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button class="btn-outline !px-3 !py-1 !text-xs">
+                                                {{ $doctor->is_active ? 'Deactivate' : 'Activate' }}
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
