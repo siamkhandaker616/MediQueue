@@ -10,13 +10,15 @@ class PatientSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'MediQueue Admin',
-            'email' => 'admin@mediqueue.test',
-            'password' => 'password',
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@mediqueue.test'],
+            [
+                'name' => 'MediQueue Admin',
+                'password' => 'password',
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
 
         $patients = [
             [
@@ -42,24 +44,28 @@ class PatientSeeder extends Seeder
         ];
 
         foreach ($patients as $data) {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => 'password',
-                'role' => 'patient',
-                'email_verified_at' => now(),
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => 'password',
+                    'role' => 'patient',
+                    'email_verified_at' => now(),
+                ]
+            );
 
-            PatientMedicalProfile::create([
-                'patient_id' => $user->id,
-                'blood_type' => $data['profile']['blood_type'],
-                'allergies' => $data['profile']['allergies'],
-                'chronic_conditions' => $data['profile']['chronic_conditions'],
-                'current_medications' => [],
-                'emergency_contact' => ['name' => 'Family Member', 'phone' => '+880 17xx-xxxxxx', 'relation' => 'Relative'],
-                'additional_notes' => null,
-                'last_updated' => now(),
-            ]);
+            PatientMedicalProfile::updateOrCreate(
+                ['patient_id' => $user->id],
+                [
+                    'blood_type' => $data['profile']['blood_type'],
+                    'allergies' => $data['profile']['allergies'],
+                    'chronic_conditions' => $data['profile']['chronic_conditions'],
+                    'current_medications' => [],
+                    'emergency_contact' => ['name' => 'Family Member', 'phone' => '+880 17xx-xxxxxx', 'relation' => 'Relative'],
+                    'additional_notes' => null,
+                    'last_updated' => now(),
+                ]
+            );
         }
     }
 }

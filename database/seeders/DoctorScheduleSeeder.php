@@ -24,11 +24,18 @@ class DoctorScheduleSeeder extends Seeder
 
         foreach (Doctor::all() as $doctor) {
             foreach ($shifts as $shift) {
-                DoctorSchedule::create($shift + [
-                    'doctor_id' => $doctor->id,
-                    'slot_duration' => 30,
-                    'is_active' => true,
-                ]);
+                DoctorSchedule::firstOrCreate(
+                    [
+                        'doctor_id' => $doctor->id,
+                        'day_of_week' => $shift['day_of_week'],
+                        'start_time' => $shift['start_time'],
+                    ],
+                    $shift + [
+                        'doctor_id' => $doctor->id,
+                        'slot_duration' => 30,
+                        'is_active' => true,
+                    ]
+                );
             }
         }
     }
