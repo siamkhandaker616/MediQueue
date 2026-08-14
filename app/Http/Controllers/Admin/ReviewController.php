@@ -26,4 +26,11 @@ class ReviewController extends Controller
 
         return back()->with('status', $review->is_visible ? 'Review approved and published.' : 'Review hidden.');
     }
+
+    public function destroy(Review $review): RedirectResponse
+    {
+        $review->delete();
+
+        return back()->with('status', 'Review removed.');
+    }
 }

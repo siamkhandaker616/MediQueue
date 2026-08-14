@@ -43,13 +43,19 @@
                         <p class="mt-3 rounded-lg bg-surface p-3 text-sm text-ink">"{{ $review->comment }}"</p>
                     @endif
 
-                    <div class="mt-4 flex justify-end">
+                    <div class="mt-4 flex justify-end gap-2">
                         <form method="POST" action="{{ route('admin.reviews.toggle', $review) }}">
                             @csrf
                             @method('PATCH')
                             <button class="{{ $review->is_visible ? 'btn-outline' : 'btn-primary' }} !px-3 !py-1.5 !text-xs">
                                 {{ $review->is_visible ? 'Hide review' : 'Approve & publish' }}
                             </button>
+                        </form>
+                        <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}"
+                              onsubmit="return confirm('Remove this review permanently?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn-outline !px-3 !py-1.5 !text-xs !text-red-600 hover:!bg-red-50">Delete</button>
                         </form>
                     </div>
                 </div>

@@ -64,6 +64,45 @@ class QueueTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_doctor_can_mark_a_patient_as_no_show(): void
+    {
+        $doctor = $this->makeDoctor();
+        $appointment = Appointment::factory()->create([
+            'doctor_id' => $doctor->id,
+            'department_id' => $doctor->department_id,
+            'date' => now()->today(),
+            'status' => Appointment::STATUS_CHECKED_IN,
+        ]);
+
+        $this->actingAs($doctor->user)
+            ->patch("/doctor/queue/{$appointment->id}/status", ['status' => Appointment::STATUS_NO_SHOW])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('appointments', [
+            'id' => $appointment->id,
+            'status' => Appointment::STATUS_NO_SHOW,
+        ]);
+    }
+
+    public function test_doctor_cannot_set_an_invalid_status(): void
+    {
+        $doctor = $this->makeDoctor();
+        $appointment = Appointment::factory()->create([
+            'doctor_id' => $doctor->id,
+            'department_id' => $doctor->department_id,
+            'date' => now()->today(),
+        ]);
+
+        $this->actingAs($doctor->user)
+            ->patch("/doctor/queue/{$appointment->id}/status", ['status' => 'nonsense'])
+            ->assertSessionHasErrors('status');
+
+        $this->assertDatabaseHas('appointments', [
+            'id' => $appointment->id,
+            'status' => Appointment::STATUS_SCHEDULED,
+        ]);
+    }
+
     public function test_patient_cannot_access_doctor_queue(): void
     {
         $patient = User::factory()->create(['role' => 'patient']);

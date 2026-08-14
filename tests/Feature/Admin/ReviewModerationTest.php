@@ -48,6 +48,24 @@ class ReviewModerationTest extends TestCase
         $this->assertDatabaseHas('reviews', ['id' => $review->id, 'is_visible' => false]);
     }
 
+    public function test_admin_can_delete_a_review(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $review = Review::factory()->create();
+
+        $this->actingAs($admin)->delete("/admin/reviews/{$review->id}")->assertRedirect();
+
+        $this->assertDatabaseMissing('reviews', ['id' => $review->id]);
+    }
+
+    public function test_doctor_cannot_delete_a_review(): void
+    {
+        $doctor = Doctor::factory()->create();
+        $review = Review::factory()->create();
+
+        $this->actingAs($doctor->user)->delete("/admin/reviews/{$review->id}")->assertForbidden();
+    }
+
     public function test_doctor_cannot_access_review_moderation(): void
     {
         $doctor = Doctor::factory()->create();

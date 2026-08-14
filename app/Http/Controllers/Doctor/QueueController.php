@@ -34,7 +34,7 @@ class QueueController extends Controller
         $this->authorizeAppointment($appointment);
 
         $data = $request->validate([
-            'status' => ['required', 'in:scheduled,checked_in,in_progress,completed,cancelled'],
+            'status' => ['required', 'in:scheduled,checked_in,in_progress,completed,cancelled,no_show'],
         ]);
 
         $appointment->update(['status' => $data['status']]);

@@ -13,10 +13,16 @@ class Appointment extends Model
     use HasFactory;
 
     public const STATUS_SCHEDULED = 'scheduled';
+
     public const STATUS_CHECKED_IN = 'checked_in';
+
     public const STATUS_IN_PROGRESS = 'in_progress';
+
     public const STATUS_COMPLETED = 'completed';
+
     public const STATUS_CANCELLED = 'cancelled';
+
+    public const STATUS_NO_SHOW = 'no_show';
 
     protected $fillable = [
         'patient_id', 'doctor_id', 'department_id', 'date', 'time_slot', 'status', 'cancellation_reason', 'notes',

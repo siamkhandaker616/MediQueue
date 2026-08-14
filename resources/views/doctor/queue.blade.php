@@ -8,6 +8,7 @@
             'in_progress' => 'bg-accent-100 text-accent-700 ring-1 ring-inset ring-accent-200',
             'completed' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200',
             'cancelled' => 'bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-200',
+            'no_show' => 'bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-200 line-through',
         ];
     @endphp
 
@@ -91,12 +92,24 @@
                                                     <input type="hidden" name="status" value="checked_in">
                                                     <button class="btn-outline !px-3 !py-1 !text-xs">Check in</button>
                                                 </form>
+                                                <form method="POST" action="{{ route('doctor.queue.status', $appointment) }}" onsubmit="return confirm('Mark this patient as no-show?');">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="no_show">
+                                                    <button class="btn-outline !px-3 !py-1 !text-xs !text-red-600 hover:!bg-red-50">No-show</button>
+                                                </form>
                                             @elseif ($appointment->status === 'checked_in')
                                                 <form method="POST" action="{{ route('doctor.queue.status', $appointment) }}">
                                                     @csrf
                                                     @method('PATCH')
                                                     <input type="hidden" name="status" value="in_progress">
                                                     <button class="btn-primary !px-3 !py-1 !text-xs">Start</button>
+                                                </form>
+                                                <form method="POST" action="{{ route('doctor.queue.status', $appointment) }}" onsubmit="return confirm('Mark this patient as no-show?');">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="no_show">
+                                                    <button class="btn-outline !px-3 !py-1 !text-xs !text-red-600 hover:!bg-red-50">No-show</button>
                                                 </form>
                                             @elseif ($appointment->status === 'in_progress')
                                                 <a href="{{ route('doctor.prescriptions.create', $appointment) }}" class="btn-outline !px-3 !py-1 !text-xs">Prescribe</a>
