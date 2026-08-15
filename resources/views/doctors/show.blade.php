@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="max-w-4xl mx-auto px-4 py-8">
 
     <a href="{{ route('doctors.index') }}" class="text-sm text-teal-600 hover:underline">&larr; Doctor directory</a>
@@ -10,7 +8,7 @@
              class="w-32 h-32 rounded-full object-cover mx-auto md:mx-0">
 
         <div class="flex-1">
-            <h1 class="text-2xl font-bold text-gray-900">Dr. {{ $doctor->user->name }}</h1>
+            <h1 class="text-2xl font-bold text-gray-900">{{ $doctor->user->name }}</h1>
             <p class="text-teal-700 font-medium">{{ $doctor->specialty }}</p>
             <p class="text-sm text-gray-500">{{ optional($doctor->department)->name }}</p>
 
@@ -26,10 +24,12 @@
                 </p>
             @endif
 
-            <a href="{{ route('appointments.create', ['doctor' => $doctor->slug]) }}"
-               class="inline-block mt-6 bg-teal-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition">
-                Book Appointment
-            </a>
+            @if (Route::has('appointments.create'))
+                <a href="{{ route('appointments.create', ['doctor' => $doctor->slug]) }}"
+                   class="inline-block mt-6 bg-teal-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-teal-700 transition">
+                    Book Appointment
+                </a>
+            @endif
         </div>
     </div>
 
@@ -46,4 +46,4 @@
     </div>
 
 </div>
-@endsection
+</x-app-layout>

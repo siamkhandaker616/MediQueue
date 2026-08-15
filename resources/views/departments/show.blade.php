@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="max-w-6xl mx-auto px-4 py-8">
 
     <a href="{{ route('departments.index') }}" class="text-sm text-teal-600 hover:underline">&larr; All departments</a>
@@ -25,7 +23,7 @@
                    class="block bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition p-6 text-center">
                     <img src="{{ $doctor->photoUrl() }}" alt="{{ $doctor->user->name }}"
                          class="w-20 h-20 rounded-full mx-auto object-cover mb-3">
-                    <h3 class="font-semibold text-gray-900">Dr. {{ $doctor->user->name }}</h3>
+                    <h3 class="font-semibold text-gray-900">{{ $doctor->user->name }}</h3>
                     <p class="text-sm text-gray-500">{{ $doctor->specialty }}</p>
                     <p class="text-sm text-amber-500 mt-1">★ {{ number_format($doctor->avg_rating, 1) }} ({{ $doctor->rating_count }})</p>
                 </a>
@@ -38,4 +36,4 @@
     @endif
 
 </div>
-@endsection
+</x-app-layout>
