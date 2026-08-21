@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,8 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
     Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
     Route::get('/analytics/print', [AnalyticsController::class, 'print'])->name('analytics.print');
+    Route::get('/refunds', [RefundController::class, 'index'])->name('refunds');
+    Route::post('/payments/{payment}/refund', [RefundController::class, 'refund'])->name('payments.refund');
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
     Route::put('/departments/{department:id}', [DepartmentController::class, 'update'])->name('departments.update');
