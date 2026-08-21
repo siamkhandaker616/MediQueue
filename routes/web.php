@@ -27,12 +27,15 @@ Route::get('/doctors/{doctor:slug}', [DoctorController::class, 'show'])->name('d
 
 /*
 |--------------------------------------------------------------------------
-| FR-03 & FR-04: Smart Appointment Wizard & Token Generation
+| FR-03 & FR-04: Smart Appointment Wizard & Token Generation (patients only)
 |--------------------------------------------------------------------------
 */
-Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
-Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
-Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
+Route::middleware(['auth', 'verified', 'role:patient'])->group(function () {
+    Route::get('/appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
+    Route::get('/appointments/{appointment}', [AppointmentController::class, 'show'])->name('appointments.show');
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+});
 
 // Real-time AJAX time slot availability route (called by Alpine.js wizard)
 Route::get('/api/doctors/{doctor}/available-slots', [AppointmentController::class, 'getSlots'])->name('doctors.slots');
@@ -53,8 +56,6 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/payments/{payment}/receipt', [PaymentReceiptController::class, 'show'])->name('payments.receipt');
-    // Patient appointment history
-    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
 
     // Profile management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

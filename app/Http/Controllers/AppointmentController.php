@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\DoctorSchedule;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -83,8 +84,8 @@ class AppointmentController extends Controller
             $tokenNumber = sprintf('TK-%s%s-%03d', $deptPrefix, $dateCode, $queuePos);
             $estimatedWait = ($queuePos - 1) * 15;
 
-            return Appointment::create([
-                'patient_id'             => auth()->id() ?? 1,
+            $appointment = Appointment::create([
+                'patient_id'             => auth()->id(),
                 'doctor_id'              => $doctor->id,
                 'department_id'          => $doctor->department_id,
                 'date'                   => $validated['date'],
@@ -97,6 +98,19 @@ class AppointmentController extends Controller
                 'payment_status'         => 'paid',
                 'symptoms'               => $validated['symptoms'] ?? null,
             ]);
+
+            // Record the payment so FR-08 receipts and FR-10 refunds work for wizard bookings too.
+            Payment::create([
+                'appointment_id'  => $appointment->id,
+                'amount'          => $doctor->consultation_fee,
+                'method'          => 'cash',
+                'transaction_id'  => 'TXN-' . strtoupper(uniqid()),
+                'status'          => Payment::STATUS_PAID,
+                'gateway_response' => ['simulated' => true],
+                'paid_at'         => now(),
+            ]);
+
+            return $appointment;
         });
 
         return redirect()->route('appointments.show', $appointment)
@@ -108,6 +122,8 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
+        abort_unless($appointment->patient_id === auth()->id(), 403);
+
         $appointment->load(['doctor.user', 'department', 'patient']);
 
         return view('appointments.show', compact('appointment'));
@@ -118,7 +134,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::where('patient_id', auth()->id() ?? 1)
+        $appointments = Appointment::where('patient_id', auth()->id())
             ->with(['doctor.user', 'department'])
             ->orderByDesc('date')
             ->paginate(10);
