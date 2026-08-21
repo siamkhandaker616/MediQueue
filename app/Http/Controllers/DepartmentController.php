@@ -9,7 +9,6 @@ class DepartmentController extends Controller
 {
     /**
      * FR-01: Department & Specialty Catalogue
-     * Browsable, searchable, filterable list of departments.
      */
     public function index(Request $request)
     {
@@ -21,7 +20,6 @@ class DepartmentController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        // Plain GET request from the Alpine.js search box -> return just the grid partial.
         if ($request->ajax() || $request->wantsJson()) {
             return view('departments.partials.grid', compact('departments'))->render();
         }

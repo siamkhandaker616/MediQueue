@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('fee_range');
             $table->unsignedTinyInteger('floor_number')->nullable();
             $table->string('room_number')->nullable();
+            $table->string('room_location')->nullable();          // Added for location label
+            $table->string('icon')->nullable();                   // Added for FontAwesome icons
+            $table->decimal('fee_min', 8, 2)->default(0);         // Added for range filter
+            $table->decimal('fee_max', 8, 2)->default(0);         // Added for range filter
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
