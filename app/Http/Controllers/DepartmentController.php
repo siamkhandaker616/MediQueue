@@ -21,7 +21,6 @@ class DepartmentController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        // Plain GET request from the Alpine.js search box -> return just the grid partial.
         if ($request->ajax() || $request->wantsJson()) {
             return view('departments.partials.grid', compact('departments'))->render();
         }
