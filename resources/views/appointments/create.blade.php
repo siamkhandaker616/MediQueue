@@ -37,7 +37,9 @@
                         class="cursor-pointer border rounded-xl p-4 transition"
                     >
                         <div class="flex items-center gap-3">
-                            <i class="{{ $dept->icon ?? 'fa-solid fa-stethoscope' }} text-teal-600 text-xl"></i>
+                            <svg class="w-6 h-6 text-teal-600 shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 8v8m-4-4h8"/>
+                            </svg>
                             <div>
                                 <h3 class="font-semibold text-gray-900">{{ $dept->name }}</h3>
                                 <p class="text-xs text-gray-500">{{ $dept->active_doctors_count ?? count($dept->activeDoctors) }} Doctor(s)</p>
