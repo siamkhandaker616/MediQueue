@@ -9,6 +9,7 @@ class DepartmentController extends Controller
 {
     /**
      * FR-01: Department & Specialty Catalogue
+     * Browsable, searchable, filterable list of departments.
      */
     public function index(Request $request)
     {

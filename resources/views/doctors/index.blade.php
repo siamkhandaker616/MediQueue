@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="max-w-6xl mx-auto px-4 py-8" x-data="doctorDirectory()">
 
     <div class="mb-8">
@@ -59,4 +57,4 @@ function doctorDirectory() {
     }
 }
 </script>
-@endsection
+</x-app-layout>

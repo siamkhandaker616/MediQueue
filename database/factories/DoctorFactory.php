@@ -15,9 +15,9 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create(['role' => 'doctor']),
+            'name' => $name = 'Dr. '.$this->faker->name(),
+            'user_id' => User::factory()->create(['role' => 'doctor', 'name' => $name]),
             'department_id' => Department::factory(),
-            'name' => 'Dr. '.$this->faker->name(),
             'email' => fn (array $attrs) => User::find($attrs['user_id'])?->email,
             'qualifications' => 'MBBS, FCPS',
             'specialties' => [$this->faker->word()],
