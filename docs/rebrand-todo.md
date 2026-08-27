@@ -33,3 +33,19 @@ palette instead of the project design language:
   but that file does not exist. Visiting `/appointments` manually throws a
   500. Nothing in the navbar links to it, so it is dormant — she needs to
   create the view (or we will during the rebrand if still missing).
+
+## Feature follow-up: guest booking
+
+- Booking currently requires a logged-in verified patient account
+  (`auth` + `verified` + `role:patient` on the appointment routes).
+- For convenience we may want **guests** to be able to book too — the real
+  restriction should only be that doctors/admins can't use patient booking.
+- If/when adding this:
+  - capture name + email (+ phone?) in the wizard and create/find a User
+    record at store-time (the whole notification stack — FR-17 reminders,
+    FR-18 queue alerts — delivers via the User model, so a real record is
+    still needed),
+  - decide how a guest re-accesses their token card (magic link / login
+    prompt on the show route),
+  - keep doctors/admins blocked via `role` checks either way.
+
