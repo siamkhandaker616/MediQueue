@@ -3,6 +3,7 @@
 use App\Http\Controllers\Doctor\PatientController;
 use App\Http\Controllers\Doctor\PrescriptionController;
 use App\Http\Controllers\Doctor\QueueController;
+use App\Http\Controllers\Doctor\RatingController;
 use App\Http\Controllers\Doctor\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,6 @@ Route::middleware('role:doctor')->group(function () {
     Route::get('/prescriptions/{prescription}/pdf', [PrescriptionController::class, 'pdf'])->name('prescriptions.pdf');
     Route::get('/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('prescriptions.show');
     Route::get('/patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
+    Route::get('/patients/{patient}/reports/{report}', [PatientController::class, 'report'])->name('patients.reports.show');
+    Route::get('/ratings', [RatingController::class, 'index'])->name('ratings.index');
 });
