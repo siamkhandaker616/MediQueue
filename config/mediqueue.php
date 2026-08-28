@@ -12,4 +12,14 @@ return [
 
     'reminder_hours' => [24, 2],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Prescription edit grace window (FR-14)
+    |--------------------------------------------------------------------------
+    | Minutes after a prescription is created during which the composing doctor
+    | may edit it before it is locked.
+    */
+
+    'prescription_edit_grace_minutes' => 60,
+
 ];

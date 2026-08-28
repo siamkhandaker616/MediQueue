@@ -18,10 +18,10 @@ class PatientMedicalProfile extends Model
     protected function casts(): array
     {
         return [
-            'allergies' => 'array',
-            'chronic_conditions' => 'array',
-            'current_medications' => 'array',
-            'emergency_contact' => 'array',
+            'allergies' => 'encrypted:array',
+            'chronic_conditions' => 'encrypted:array',
+            'current_medications' => 'encrypted:array',
+            'emergency_contact' => 'encrypted:array',
             'last_updated' => 'datetime',
         ];
     }

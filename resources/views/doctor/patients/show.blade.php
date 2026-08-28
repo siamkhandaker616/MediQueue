@@ -9,7 +9,7 @@
 
     <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-            <p class="text-sm text-muted">FR-12 · patient medical profile</p>
+            <p class="text-sm text-muted">FR-13 · patient medical profile</p>
             <h1 class="text-2xl font-bold tracking-tight">{{ $patient->name }}</h1>
             <p class="mt-1 text-sm text-muted">{{ $patient->email }}</p>
         </div>
@@ -49,6 +49,38 @@
         </div>
     @endif
 
+    <div class="mt-6 card overflow-hidden">
+        <div class="border-b border-brand-100 px-5 py-4">
+            <h2 class="font-semibold">Medical reports</h2>
+            <p class="text-xs text-muted">FR-12 · reports uploaded for this patient</p>
+        </div>
+
+        @if ($reports->isEmpty())
+            <p class="px-5 py-8 text-center text-sm text-muted">No reports on file.</p>
+        @else
+            <ul class="divide-y divide-brand-50">
+                @foreach ($reports as $report)
+                    <li class="flex items-center justify-between gap-3 px-5 py-3">
+                        <div class="min-w-0">
+                            <p class="text-sm font-medium truncate">{{ $report->file_name }}</p>
+                            <p class="text-xs text-muted">
+                                {{ ucwords(str_replace('_', ' ', $report->report_type)) }}
+                                @if ($report->report_date)
+                                    · {{ $report->report_date->format('d M Y') }}
+                                @endif
+                                @if ($report->file_size)
+                                    · {{ round($report->file_size / 1024, 1) }} KB
+                                @endif
+                            </p>
+                        </div>
+                        <a href="{{ route('doctor.patients.reports.show', [$patient->id, $report->id]) }}"
+                           class="btn-outline text-xs shrink-0">Download</a>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    </div>
+
     <div class="mt-6 grid gap-6 lg:grid-cols-2">
         <div class="card overflow-hidden">
             <div class="border-b border-brand-100 px-5 py-4">
@@ -75,8 +107,8 @@
 
         <div class="card overflow-hidden">
             <div class="border-b border-brand-100 px-5 py-4">
-                <h2 class="font-semibold">Medication tracker</h2>
-                <p class="text-xs text-muted">FR-16 · active medications from your prescriptions</p>
+                <h2 class="font-semibold">Active medications</h2>
+                <p class="text-xs text-muted">from prescriptions you have written</p>
             </div>
 
             @php

@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 ['route' => 'doctor.dashboard', 'label' => 'Queue dashboard', 'icon' => 'M3 4h13M3 8h9m-9 4h6m4 0l4-4 4 4m-8 0l4 4 4-4M3 16h15'],
                 ['route' => 'doctor.schedule', 'label' => 'Schedule & leave', 'icon' => 'M8 7V3m8 4V3M3 9h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'],
                 ['route' => 'doctor.prescriptions.index', 'label' => 'Prescriptions', 'icon' => 'M9 12h6m-6 4h6M9 8h6m-8 12h10a2 2 0 002-2V6a2 2 0 00-2-2H9l-5 5v11a2 2 0 002 2z'],
+                ['route' => 'doctor.ratings.index', 'label' => 'Ratings & reviews', 'icon' => 'M11.48 3.5a.56.56 0 011.04 0l2.12 5.11.55.35 5.52.44c.5.04.7.66.32.99l-4.2 3.6-.18.56 1.28 5.39a.56.56 0 01-.84.6l-4.72-2.88-.49-.3-.5.3-4.72 2.89a.56.56 0 01-.84-.61l1.29-5.39-.18-.56-4.2-3.6a.56.56 0 01.32-.99l5.51-.44.55-.35 2.13-5.11z'],
             ];
         }
 
