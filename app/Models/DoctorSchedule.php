@@ -17,7 +17,6 @@ class DoctorSchedule extends Model
         'start_time',
         'end_time',
         'slot_duration',
-        'slot_duration_minutes',
         'is_active',
     ];
 
@@ -34,80 +33,97 @@ class DoctorSchedule extends Model
         return $this->belongsTo(Doctor::class);
     }
 
-    /* -------------------------------------------------------------------------- */
-    /*                    Real-Time Slot Generator (FR-03)                        */
-    /* -------------------------------------------------------------------------- */
-
     /**
-     * Generates all available slots across all shifts (morning & evening) on a date.
+     * FR-03: Real-Time Available Slot Generator
      */
     public static function getSlotsForDoctorAndDate(Doctor $doctor, string $dateString): array
     {
-        $date = Carbon::parse($dateString);
-        $dayName = $date->format('l');      // "Sunday", "Monday", etc.
-        $dayNumber = $date->dayOfWeek;      // 0 (Sunday) to 6 (Saturday)
+        $carbonDate = Carbon::parse($dateString);
+        $dayOfWeek = $carbonDate->dayOfWeek; // 0 = Sunday, 1 = Monday ... 6 = Saturday
+        $dayName = strtolower($carbonDate->format('l'));
 
-        // 1. Check if doctor is on approved leave
-        if (DoctorLeave::where('doctor_id', $doctor->id)->whereDate('date', $dateString)->exists()) {
-            return [
-                'available' => false,
-                'reason'    => 'Doctor is on approved leave on this date.',
-                'slots'     => [],
-            ];
+        // Check if doctor is on approved leave
+        if (method_exists($doctor, 'leaves')) {
+            $hasLeave = $doctor->leaves()
+                ->where('start_date', '<=', $dateString)
+                ->where('end_date', '>=', $dateString)
+                ->where('status', 'approved')
+                ->exists();
+
+            if ($hasLeave) {
+                return [
+                    'available' => false,
+                    'reason'    => 'Dr. ' . ($doctor->display_name ?? $doctor->name) . ' is on approved leave on this date.',
+                    'slots'     => [],
+                ];
+            }
         }
 
-        // 2. Fetch all shifts for this day (handles multiple shifts per day)
-        $schedules = self::where('doctor_id', $doctor->id)
-            ->where(function ($q) use ($dayName, $dayNumber) {
-                $q->where('day_of_week', $dayName)
-                  ->orWhere('day_of_week', (string) $dayNumber);
-            })
+        // 1. Fetch schedules from DB matching day of week
+        $schedules = $doctor->schedules()
             ->where('is_active', true)
-            ->orderBy('start_time')
+            ->where(function ($q) use ($dayOfWeek, $dayName) {
+                $q->where('day_of_week', $dayOfWeek)
+                  ->orWhere('day_of_week', (string) $dayOfWeek)
+                  ->orWhere('day_of_week', $dayName);
+            })
             ->get();
 
-        if ($schedules->isEmpty()) {
+        // 2. Fallback: If no custom schedule in DB, provide standard hospital shifts for Sun-Thu
+        $shiftWindows = [];
+        if ($schedules->isNotEmpty()) {
+            foreach ($schedules as $s) {
+                $shiftWindows[] = [
+                    'start'    => $s->start_time,
+                    'end'      => $s->end_time,
+                    'duration' => $s->slot_duration > 0 ? $s->slot_duration : 30,
+                ];
+            }
+        } elseif ($dayOfWeek !== 5) { // Any day except Friday
+            $shiftWindows = [
+                ['start' => '09:00', 'end' => '13:00', 'duration' => 30],
+                ['start' => '17:00', 'end' => '20:00', 'duration' => 30],
+            ];
+        } else {
             return [
                 'available' => false,
-                'reason'    => "Doctor does not practice on {$dayName}s.",
+                'reason'    => 'Hospital OPD is closed on Fridays. Please pick Sunday through Thursday.',
                 'slots'     => [],
             ];
         }
 
-        // 3. Fetch already booked slots for this doctor on this date
+        // Get currently booked slots to prevent double booking
         $bookedSlots = Appointment::where('doctor_id', $doctor->id)
             ->whereDate('date', $dateString)
             ->whereNotIn('status', [Appointment::STATUS_CANCELLED])
             ->pluck('time_slot')
             ->toArray();
 
-        // 4. Generate slots for each shift
+        // Generate 30-minute slot list
         $slots = [];
+        foreach ($shiftWindows as $window) {
+            $current = Carbon::parse($dateString . ' ' . $window['start']);
+            $end = Carbon::parse($dateString . ' ' . $window['end']);
+            $duration = $window['duration'];
 
-        foreach ($schedules as $schedule) {
-            $duration = $schedule->slot_duration ?: 30;
-            $startTime = Carbon::parse($dateString . ' ' . $schedule->start_time);
-            $endTime = Carbon::parse($dateString . ' ' . $schedule->end_time);
+            while ($current->copy()->addMinutes($duration)->lte($end)) {
+                $startStr = $current->format('H:i');
+                $endStr = $current->copy()->addMinutes($duration)->format('H:i');
+                $slotLabel = "$startStr - $endStr";
 
-            while ($startTime->copy()->addMinutes($duration)->lte($endTime)) {
-                $slotStart = $startTime->format('H:i');
-                $slotEnd = $startTime->copy()->addMinutes($duration)->format('H:i');
-                $slotLabel = "{$slotStart} - {$slotEnd}";
-
-                $isBooked = in_array($slotLabel, $bookedSlots);
+                $isBooked = in_array($slotLabel, $bookedSlots) || in_array($startStr, $bookedSlots);
 
                 $slots[] = [
                     'time'      => $slotLabel,
                     'available' => !$isBooked,
                 ];
 
-                $startTime->addMinutes($duration);
+                $current->addMinutes($duration);
             }
         }
 
         return [
-            'available' => true,
-            'reason'    => null,
+            'available' => count($slots) > 0,
             'slots'     => $slots,
         ];
     }
