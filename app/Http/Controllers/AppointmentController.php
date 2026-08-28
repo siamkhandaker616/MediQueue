@@ -36,14 +36,19 @@ class AppointmentController extends Controller
     }
 
     /**
-     * AJAX endpoint: Fetch real-time available time slots for chosen doctor & date.
+     * AJAX Endpoint: Fetch real-time available slots (Accepts either ID or Slug)
      */
-    public function getSlots(Request $request, Doctor $doctor)
+    public function getSlots(Request $request, $doctor)
     {
-        $request->validate(['date' => 'required|date|after_or_equal:today']);
-
-        $slotData = DoctorSchedule::getSlotsForDoctorAndDate($doctor, $request->query('date'));
-
+        // Find doctor by ID or Slug seamlessly
+        $doc = is_numeric($doctor)
+            ? Doctor::find($doctor)
+            : Doctor::where('slug', $doctor)->orWhere('id', $doctor)->first();
+        if (!$doc) {
+            $doc = Doctor::firstOrFail();
+        }
+        $date = $request->query('date', now()->toDateString());
+        $slotData = DoctorSchedule::getSlotsForDoctorAndDate($doc, $date);
         return response()->json($slotData);
     }
 
@@ -95,7 +100,7 @@ class AppointmentController extends Controller
                 'estimated_wait_minutes' => $estimatedWait,
                 'fee'                    => $doctor->consultation_fee,
                 'status'                 => Appointment::STATUS_SCHEDULED,
-                'payment_status'         => 'paid',
+                'payment_status'         => 'pending',
                 'symptoms'               => $validated['symptoms'] ?? null,
             ]);
 
@@ -113,8 +118,8 @@ class AppointmentController extends Controller
             return $appointment;
         });
 
-        return redirect()->route('appointments.show', $appointment)
-            ->with('success', 'Appointment successfully confirmed! Your token has been generated.');
+        return redirect()->route('payments.checkout', $appointment)
+            ->with('success', 'Appointment slot reserved! Please select a payment method to complete booking.');
     }
 
     /**

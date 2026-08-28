@@ -8,16 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // The create-table migrations now define these columns directly, so
-        // every addition is guarded to keep fresh installs and legacy
-        // databases on the same code path without duplicate-column errors.
         Schema::table('departments', function (Blueprint $table) {
             if (!Schema::hasColumn('departments', 'description')) {
                 $table->text('description')->nullable();
-            } else {
-                $table->string('description')->nullable()->change();
             }
-
             if (!Schema::hasColumn('departments', 'icon')) {
                 $table->string('icon')->nullable();
             }
@@ -50,12 +44,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('departments', function (Blueprint $table) {
-            $table->dropColumn(['icon', 'room_location', 'fee_min', 'fee_max']);
-        });
-
-        Schema::table('doctors', function (Blueprint $table) {
-            $table->dropColumn(['slug', 'specialty', 'avg_rating', 'rating_count']);
-        });
+        // Safe down
     }
 };
