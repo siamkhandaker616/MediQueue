@@ -294,7 +294,7 @@ function appointmentWizard() {
                 })
                 .catch(err => {
                     this.loadingSlots = false;
-                    this.slotMessage = 'Doctor is not available on this date. Please pick another day.';
+                    this.slotMessage = 'Could not load slots. Please pick another date.';
                 });
         }
     }

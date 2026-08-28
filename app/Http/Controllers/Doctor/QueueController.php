@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Services\QueueAlertService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,6 +39,8 @@ class QueueController extends Controller
         ]);
 
         $appointment->update(['status' => $data['status']]);
+
+        app(QueueAlertService::class)->dispatchFor($appointment);
 
         return back()->with('status', 'Queue updated.');
     }

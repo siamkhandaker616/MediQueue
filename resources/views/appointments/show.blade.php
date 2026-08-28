@@ -82,13 +82,13 @@
 
                 @if ($appointment->canBeRescheduled())
                     <a href="{{ route('appointments.reschedule', $appointment) }}" class="bg-surface border border-brand-200 text-ink px-5 py-2.5 rounded-xl font-medium hover:border-brand-500 transition text-sm">
-                        <i class="fa-solid fa-calendar-days mr-1 text-brand-600"></i> Reschedule (FR-06)
+                        <i class="fa-solid fa-calendar-days mr-1 text-brand-600"></i> Reschedule
                     </a>
                 @endif
 
                 @if ($appointment->payment)
                     <a href="{{ route('payments.receipt', $appointment->payment) }}" class="bg-brand-50 text-brand-700 px-5 py-2.5 rounded-xl font-medium hover:bg-brand-100 transition text-sm">
-                        <i class="fa-solid fa-receipt mr-1"></i> View Receipt (FR-08)
+                        <i class="fa-solid fa-receipt mr-1"></i> View Receipt
                     </a>
                 @endif
             @endif
