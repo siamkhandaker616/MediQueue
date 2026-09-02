@@ -13,6 +13,7 @@
 :root {
     --canvas: 247 231 239;
     --surface: 250 232 238;
+    --surface-alt: 243 222 231;
     --ink: 63 52 56;
     --muted: 130 116 123;
 
@@ -39,6 +40,7 @@
 [data-theme="dark"] {
     --canvas: 23 19 22;
     --surface: 34 29 32;
+    --surface-alt: 42 36 40;
     --ink: 242 237 240;
     --muted: 170 157 164;
 

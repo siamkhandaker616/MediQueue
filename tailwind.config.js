@@ -18,6 +18,7 @@ export default {
             colors: {
                 canvas: 'rgb(var(--canvas) / <alpha-value>)',
                 surface: 'rgb(var(--surface) / <alpha-value>)',
+                'surface-alt': 'rgb(var(--surface-alt) / <alpha-value>)',
                 ink: 'rgb(var(--ink) / <alpha-value>)',
                 muted: 'rgb(var(--muted) / <alpha-value>)',
 
