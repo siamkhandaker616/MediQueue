@@ -11,12 +11,12 @@
 */
 
 :root {
-    --canvas: 252 246 249;
-    --surface: 255 255 255;
+    --canvas: 247 231 239;
+    --surface: 250 232 238;
     --ink: 63 52 56;
     --muted: 130 116 123;
 
-    --brand-50: 255 245 248;
+    --brand-50:  247 227 233;
     --brand-100: 251 225 234;
     --brand-200: 247 201 218;
     --brand-300: 240 169 196;
@@ -32,6 +32,8 @@
     --accent-500: 95 185 164;
     --accent-600: 74 158 139;
     --accent-700: 58 131 115;
+
+    --ecg-stroke: #7fd1bb;
 }
 
 [data-theme="dark"] {
@@ -56,6 +58,8 @@
     --accent-500: 82 144 132;
     --accent-600: 110 172 159;
     --accent-700: 142 200 188;
+
+    --ecg-stroke: #2f665b;
 }
 
 @layer base {
@@ -101,3 +105,5 @@
         @apply px-4 py-3 text-sm text-ink;
     }
 }
+
+

@@ -19,11 +19,7 @@
                 <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center gap-3">
                         <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-white shadow-sm">
-                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
+                            <x-application-logo />
                             <span class="text-lg font-bold tracking-tight text-brand-700">MediQueue</span>
                         </a>
                         <span class="hidden rounded-full bg-accent-100 px-2.5 py-0.5 text-xs font-semibold text-accent-700 sm:inline-flex">

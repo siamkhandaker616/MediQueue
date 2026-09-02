@@ -29,11 +29,7 @@
             <header class="sticky top-0 z-40 border-b border-brand-100 bg-surface/85 backdrop-blur">
                 <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                     <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 text-white shadow-sm">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
-                        </span>
+                        <x-application-logo />
                         <span class="text-lg font-bold tracking-tight text-brand-700">MediQueue</span>
                     </a>
 
@@ -99,11 +95,7 @@
                 <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
                     <div>
                         <div class="flex items-center gap-2.5">
-                            <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 text-white">
-                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                </svg>
-                            </span>
+                            <x-application-logo />
                             <span class="text-lg font-bold tracking-tight">MediQueue</span>
                         </div>
                         <p class="mt-4 text-sm leading-relaxed text-brand-100">
