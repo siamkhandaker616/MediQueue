@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ isset($title) ? $title.' - ' : '' }}{{ config('app.name', 'MediQueue') }}</title>
+        <title>{{ config('app.name', 'MediQueue') }}{{ isset($title) ? ' - '.$title : '' }}</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
@@ -37,6 +38,14 @@
                             </span>
                             <span class="font-medium text-ink">{{ auth()->user()->name }}</span>
                         </div>
+                        <button type="button" @click="toggle()" aria-label="Toggle theme" class="inline-flex items-center justify-center rounded-lg border border-brand-200 bg-surface p-2 text-brand-700 transition hover:bg-brand-50">
+                            <svg x-show="theme === 'dark'" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+                            </svg>
+                            <svg x-show="theme === 'light'" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-15a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zM3 11a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm16 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1zM5.64 5.64a1 1 0 0 1 1.41 0l.71.7a1 1 0 1 1-1.41 1.42l-.71-.7a1 1 0 0 1 0-1.42zM18.36 18.36a1 1 0 0 1 1.41 0l.71.71a1 1 0 1 1-1.42 1.41l-.7-.71a1 1 0 0 1 0-1.41zM5.64 18.36a1 1 0 0 1 0 1.42l-.71.7a1 1 0 1 1-1.42-1.41l.71-.71a1 1 0 0 1 1.42 0zM18.36 5.64a1 1 0 0 1 0 1.42l-.71.7a1 1 0 1 1-1.41-1.42l.71-.7a1 1 0 0 1 1.41 0z"/>
+                            </svg>
+                        </button>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="btn-outline !px-3 !py-1.5 !text-xs">Sign out</button>

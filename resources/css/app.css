@@ -4,9 +4,8 @@
 
 /*
     MediQueue design tokens.
-    Two palettes, selected by <html data-theme="...">:
-      :root              -> "Blush & Mint" (default)
-      [data-theme=soft]  -> "Softer muted pink"
+    :root                -> "Light" default (blush & mint)
+    [data-theme="dark"]  -> matching dark palette
     Values are space-separated RGB triplets consumed by Tailwind
     via rgb(var(--token) / <alpha-value>).
 */
@@ -35,27 +34,28 @@
     --accent-700: 58 131 115;
 }
 
-[data-theme="soft"] {
-    --canvas: 253 244 248;
-    --ink: 74 58 66;
-    --muted: 148 130 140;
+[data-theme="dark"] {
+    --canvas: 23 19 22;
+    --surface: 34 29 32;
+    --ink: 242 237 240;
+    --muted: 170 157 164;
 
-    --brand-50: 253 242 247;
-    --brand-100: 248 226 236;
-    --brand-200: 250 214 228;
-    --brand-300: 243 189 213;
-    --brand-400: 222 161 190;
-    --brand-500: 201 134 159;
-    --brand-600: 176 111 139;
-    --brand-700: 149 89 122;
+    --brand-50: 52 30 40;
+    --brand-100: 74 44 58;
+    --brand-200: 102 62 82;
+    --brand-300: 140 84 110;
+    --brand-400: 178 100 136;
+    --brand-500: 206 124 158;
+    --brand-600: 220 148 176;
+    --brand-700: 233 176 199;
 
-    --accent-100: 238 243 234;
-    --accent-200: 214 228 203;
-    --accent-300: 198 214 184;
-    --accent-400: 174 197 156;
-    --accent-500: 147 175 130;
-    --accent-600: 122 151 107;
-    --accent-700: 99 124 86;
+    --accent-100: 26 46 42;
+    --accent-200: 34 64 58;
+    --accent-300: 46 88 80;
+    --accent-400: 60 112 102;
+    --accent-500: 82 144 132;
+    --accent-600: 110 172 159;
+    --accent-700: 142 200 188;
 }
 
 @layer base {
