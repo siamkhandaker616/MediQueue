@@ -48,7 +48,7 @@
                                     @endif
                                 </td>
                                 <td class="table-cell">
-                                    <span class="badge {{ $doctor->is_active ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200' : 'bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-200' }}">
+                                    <span class="badge {{ $doctor->is_active ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200' : 'bg-brand-50 text-muted ring-1 ring-inset ring-brand-200' }}">
                                         {{ $doctor->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>

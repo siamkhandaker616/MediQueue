@@ -84,13 +84,16 @@ class Payment extends Model
 
     public function paymentMethodLabel(): string
     {
-        return match ($this->method) {
-            'bkash'  => 'bKash Mobile Banking',
-            'nagad'  => 'Nagad Mobile Banking',
-            'rocket' => 'Rocket Mobile Banking',
-            'card'   => 'Credit / Debit Card',
-            'wallet' => 'Digital Health Wallet',
-            default  => ucfirst($this->method ?? 'Digital Payment'),
+        $method = strtolower($this->method ?? '');
+        return match ($method) {
+            'bkash'           => 'bKash Mobile Banking',
+            'nagad'           => 'Nagad Mobile Banking',
+            'rocket'          => 'Rocket Mobile Banking',
+            'card'            => 'Credit / Debit Card',
+            'wallet'          => 'Digital Health Wallet',
+            'sslcommerz'      => 'SSLCommerz Gateway',
+            'internetbanking' => 'Internet Banking',
+            default           => ucfirst($this->method ?? 'Digital Payment'),
         };
     }
 }

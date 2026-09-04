@@ -6,6 +6,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\MedicalProfileController;
 use App\Http\Controllers\Patient\MedicalReportController;
+use App\Http\Controllers\Patient\MedicationTrackerController;
 use App\Http\Controllers\Patient\PrescriptionController;
 use App\Http\Controllers\Patient\ReviewController;
 use App\Http\Controllers\Patient\VisitHistoryController;
@@ -96,6 +97,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // FR-18: Digital Prescriptions
     Route::get('/patient/prescriptions', [PrescriptionController::class, 'index'])->name('patient.prescriptions.index');
     Route::get('/patient/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('patient.prescriptions.show');
+
+    // FR-16: Medication Tracker
+    Route::get('/patient/medications', [MedicationTrackerController::class, 'index'])->name('patient.medications.index');
+    Route::post('/patient/medications/log', [MedicationTrackerController::class, 'log'])->name('patient.medications.log');
+    Route::get('/patient/medications/history', [MedicationTrackerController::class, 'history'])->name('patient.medications.history');
 
     // FR-19: Doctor Reviews
     Route::get('/patient/appointments/{appointment}/review', [ReviewController::class, 'create'])->name('patient.reviews.create');

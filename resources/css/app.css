@@ -38,6 +38,7 @@
 }
 
 [data-theme="dark"] {
+    color-scheme: dark;
     --canvas: 23 19 22;
     --surface: 34 29 32;
     --surface-alt: 42 36 40;

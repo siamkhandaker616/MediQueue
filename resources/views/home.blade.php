@@ -244,11 +244,11 @@
 
             <div class="relative mt-8 flex flex-wrap justify-center gap-3">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="inline-flex items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50">
+                    <a href="{{ route('dashboard') }}" class="inline-flex items-center rounded-lg bg-surface px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50">
                         Go to dashboard
                     </a>
                 @else
-                    <a href="{{ route('register') }}" class="inline-flex items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50">
+                    <a href="{{ route('register') }}" class="inline-flex items-center rounded-lg bg-surface px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-brand-50">
                         Create a free account
                     </a>
                     <a href="{{ route('login') }}" class="inline-flex items-center rounded-lg border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">

@@ -3,3 +3,21 @@ services:
     name: mediqueue
     runtime: docker
     dockerfilePath: Dockerfile
+    envVars:
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+
+databases:
+  - name: mediqueue-db
+    plan: free
+    databaseName: mediqueue

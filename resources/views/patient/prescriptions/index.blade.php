@@ -11,6 +11,9 @@
         <a href="{{ route('patient.history') }}" class="bg-surface border border-brand-200 text-ink hover:border-brand-500 px-4 py-2.5 rounded-xl text-sm font-medium transition">
             &larr; Visit History
         </a>
+        <a href="{{ route('patient.medications.index') }}" class="bg-surface border border-brand-200 text-ink hover:border-brand-500 px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2">
+            <i class="fa-solid fa-pills"></i> Medication Tracker
+        </a>
     </div>
 
     @if ($prescriptions->isEmpty())

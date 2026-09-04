@@ -16,7 +16,7 @@ class PrescriptionController extends Controller
         $patientId = auth()->id() ?? 1;
 
         $prescriptions = Prescription::where('patient_id', $patientId)
-            ->with(['doctor.user', 'doctor.department', 'appointment'])
+            ->with(['doctor.user', 'doctor.department', 'appointment', 'items'])
             ->orderByDesc('created_at')
             ->paginate(10);
 
@@ -31,7 +31,7 @@ class PrescriptionController extends Controller
         $patientId = auth()->id() ?? 1;
         abort_if($prescription->patient_id !== $patientId, 403, 'Unauthorized access to prescription.');
 
-        $prescription->load(['doctor.user', 'doctor.department', 'patient', 'appointment']);
+        $prescription->load(['doctor.user', 'doctor.department', 'patient', 'appointment', 'items']);
 
         return view('patient.prescriptions.show', compact('prescription'));
     }

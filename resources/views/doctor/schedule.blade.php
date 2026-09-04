@@ -32,7 +32,7 @@
                                 @endif
                             </div>
                             @php
-                                $shifts = $byDay->get($index, collect());
+                                $shifts = $byDay->get((string) $index, $byDay->get($index, collect()));
                             @endphp
                             @if ($shifts->isEmpty())
                                 <p class="mt-2 text-xs text-muted">Off</p>
