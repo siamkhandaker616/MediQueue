@@ -42,12 +42,16 @@ class PaymentController extends Controller
         $vat = round(($doctorFee + $serviceFee) * 0.05, 2);
         $total = $doctorFee + $serviceFee + $vat;
 
-        $payment = DB::transaction(function () use ($appointment, $validated, $total) {
+        $payment = DB::transaction(function () use ($appointment, $validated, $total, $serviceFee, $vat) {
             $payment = Payment::updateOrCreate(
                 ['appointment_id' => $appointment->id],
                 [
+                    'patient_id'       => $appointment->patient_id,
                     'amount'           => $total,
-                    'method'           => strtoupper($validated['method']),
+                    'service_fee'      => $serviceFee,
+                    'vat_amount'       => $vat,
+                    'total_paid'       => $total,
+                    'method'           => strtolower($validated['method']),
                     'transaction_id'   => Payment::generateTransactionId(),
                     'status'           => Payment::STATUS_PAID,
                     'gateway_response' => [

@@ -48,21 +48,24 @@ class ReviewController extends Controller
 
         DB::transaction(function () use ($appointment, $patientId, $validated) {
             Review::create([
-                'appointment_id' => $appointment->id,
-                'doctor_id'      => $appointment->doctor_id,
-                'patient_id'     => $patientId,
-                'rating'         => $validated['rating'],
-                'comment'        => $validated['comment'] ?? null,
-                'is_anonymous'   => $validated['is_anonymous'] ?? false,
+                'appointment_id'       => $appointment->id,
+                'doctor_id'            => $appointment->doctor_id,
+                'patient_id'           => $patientId,
+                'overall_rating'       => $validated['rating'],
+                'punctuality_rating'   => $validated['rating'],
+                'communication_rating' => $validated['rating'],
+                'knowledge_rating'     => $validated['rating'],
+                'comment'              => $validated['comment'] ?? null,
+                'is_visible'           => true,
             ]);
 
             // Recalculate doctor's overall average rating & total reviews
             $doctor = $appointment->doctor;
-            $avgRating = Review::where('doctor_id', $doctor->id)->avg('rating');
+            $avgRating = Review::where('doctor_id', $doctor->id)->avg('overall_rating');
             $ratingCount = Review::where('doctor_id', $doctor->id)->count();
 
             $doctor->update([
-                'avg_rating'   => round($avgRating, 2),
+                'avg_rating'   => round($avgRating ?? 5.0, 2),
                 'rating_count' => $ratingCount,
             ]);
         });
