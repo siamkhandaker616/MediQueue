@@ -107,7 +107,7 @@
         <!-- Recommended Diagnostic Tests -->
         @if (!empty($prescription->tests_recommended))
             <div class="bg-surface-alt rounded-2xl p-4 mb-6 border border-brand-100 text-xs">
-                <span class="font-bold text-brand-600 block mb-1">Recommended Diagnostic Tests / Investigations:</span>
+                <span class="font-bold text-brand-600 block mb-1">Recommended Diagnostic Tests:</span>
                 @if (is_array($prescription->tests_recommended))
                     <ul class="list-disc list-inside text-ink space-y-0.5">
                         @foreach ($prescription->tests_recommended as $tst)
@@ -136,11 +136,11 @@
             @endif
         </div>
 
-        <!-- Doctor Digital Signature Footer -->
+        <!-- Footer / Signature -->
         <div class="border-t border-brand-100 pt-6 flex justify-between items-end">
             <div class="text-[10px] text-muted max-w-xs">
                 Generated via MediQueue Digital Healthcare System.<br>
-                Valid without physical signature when verified with official QR code.
+                Valid digital medical record.
             </div>
             <div class="text-center">
                 <div class="h-10 border-b border-ink/40 w-40 mx-auto flex items-end justify-center pb-1">

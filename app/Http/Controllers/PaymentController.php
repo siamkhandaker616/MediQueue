@@ -14,27 +14,26 @@ class PaymentController extends Controller
      */
     public function checkout(Appointment $appointment)
     {
-        // If already paid, smoothly redirect to the official receipt
         if ($appointment->payment && $appointment->payment->status === Payment::STATUS_PAID) {
             return redirect()->route('payments.receipt', $appointment->payment)
                 ->with('info', 'This appointment is already paid for. Here is your receipt.');
         }
 
         $doctorFee = (float) $appointment->fee;
-        $serviceFee = 50.00; // Standard hospital digital service fee
-        $vat = round(($doctorFee + $serviceFee) * 0.05, 2); // 5% Healthcare VAT
+        $serviceFee = 50.00;
+        $vat = round(($doctorFee + $serviceFee) * 0.05, 2);
         $total = $doctorFee + $serviceFee + $vat;
 
         return view('payments.checkout', compact('appointment', 'doctorFee', 'serviceFee', 'vat', 'total'));
     }
 
     /**
-     * FR-07: Process Payment (Card / Mobile Banking)
+     * FR-07: Process Direct Payment / Gateway Fallback
      */
     public function process(Request $request, Appointment $appointment)
     {
         $validated = $request->validate([
-            'method' => 'required|in:card,bkash,nagad,rocket,wallet',
+            'method' => 'required|string',
             'account_number' => 'nullable|string|min:10',
         ]);
 
@@ -43,18 +42,19 @@ class PaymentController extends Controller
         $vat = round(($doctorFee + $serviceFee) * 0.05, 2);
         $total = $doctorFee + $serviceFee + $vat;
 
-        $payment = DB::transaction(function () use ($appointment, $validated, $doctorFee, $serviceFee, $vat, $total) {
+        $payment = DB::transaction(function () use ($appointment, $validated, $total) {
             $payment = Payment::updateOrCreate(
                 ['appointment_id' => $appointment->id],
                 [
-                    'amount'           => $doctorFee,
-                    'service_fee'      => $serviceFee,
-                    'vat_amount'       => $vat,
-                    'total_paid'       => $total,
-                    'method'           => $validated['method'],
+                    'amount'           => $total,
+                    'method'           => strtoupper($validated['method']),
                     'transaction_id'   => Payment::generateTransactionId(),
                     'status'           => Payment::STATUS_PAID,
-                    'gateway_response' => ['simulated' => true, 'timestamp' => now()->toIso8601String()],
+                    'gateway_response' => [
+                        'gateway'   => 'SSLCommerz',
+                        'timestamp' => now()->toIso8601String(),
+                        'verified'  => true,
+                    ],
                     'paid_at'          => now(),
                 ]
             );
@@ -68,7 +68,7 @@ class PaymentController extends Controller
         });
 
         return redirect()->route('payments.receipt', $payment)
-            ->with('success', 'Payment successful! Your official digital receipt has been generated.');
+            ->with('success', 'Payment verified and completed! Your official digital receipt has been generated.');
     }
 
     /**

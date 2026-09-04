@@ -16,7 +16,7 @@
     @if ($prescriptions->isEmpty())
         <div class="bg-surface border border-brand-100 rounded-3xl p-12 text-center my-6">
             <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                <i class="fa-solid fa-prescription"></i>
+                ℞
             </div>
             <h3 class="text-lg font-bold text-ink">No prescriptions issued yet</h3>
             <p class="text-muted text-sm mt-1 mb-6">Prescriptions written by your doctors after consultation will appear here automatically.</p>

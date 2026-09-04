@@ -10,6 +10,7 @@ use App\Http\Controllers\Patient\ReviewController;
 use App\Http\Controllers\Patient\VisitHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SSLCommerzPaymentController;
 use Illuminate\Support\Facades\Route;
 
 /* -------------------------------------------------------------------------- */
@@ -49,12 +50,19 @@ Route::get('/api/doctors/{doctor}/available-slots', [AppointmentController::clas
 
 /*
 |--------------------------------------------------------------------------
-| FR-07 & FR-08: Payments & Receipts
+| FR-07 & FR-08: Payments & SSLCommerz Gateway
 |--------------------------------------------------------------------------
 */
 Route::get('/appointments/{appointment}/payment', [PaymentController::class, 'checkout'])->name('payments.checkout');
 Route::post('/appointments/{appointment}/payment', [PaymentController::class, 'process'])->name('payments.process');
 Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+
+// SSLCommerz Official Gateway Endpoints & Callbacks
+Route::post('/sslcommerz/pay/{appointment}', [SSLCommerzPaymentController::class, 'pay'])->name('sslcommerz.pay');
+Route::any('/sslcommerz/success', [SSLCommerzPaymentController::class, 'success'])->name('sslcommerz.success');
+Route::any('/sslcommerz/fail', [SSLCommerzPaymentController::class, 'fail'])->name('sslcommerz.fail');
+Route::any('/sslcommerz/cancel', [SSLCommerzPaymentController::class, 'cancel'])->name('sslcommerz.cancel');
+Route::post('/sslcommerz/ipn', [SSLCommerzPaymentController::class, 'ipn'])->name('sslcommerz.ipn');
 
 /* -------------------------------------------------------------------------- */
 /*                        Patient Portal Authenticated Routes                 */

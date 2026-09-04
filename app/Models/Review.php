@@ -11,44 +11,25 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'patient_id', 'doctor_id', 'appointment_id', 'punctuality_rating',
-        'communication_rating', 'knowledge_rating', 'overall_rating', 'comment', 'is_visible',
+        'appointment_id',
+        'doctor_id',
+        'patient_id',
+        'rating',
+        'comment',
+        'is_anonymous',
     ];
 
     protected function casts(): array
     {
-        return ['is_visible' => 'boolean'];
+        return [
+            'rating'       => 'integer',
+            'is_anonymous' => 'boolean',
+        ];
     }
 
-    protected static function booted(): void
+    public function appointment(): BelongsTo
     {
-        static::saved(function (Review $review) {
-            $review->syncDoctorRating();
-        });
-
-        static::deleted(function (Review $review) {
-            $review->syncDoctorRating();
-        });
-    }
-
-    public function syncDoctorRating(): void
-    {
-        if (! isset($this->doctor_id)) {
-            return;
-        }
-
-        $doctor = $this->doctor()->firstOrFail();
-        $visible = $doctor->reviews()->where('is_visible', true);
-
-        $doctor->update([
-            'avg_rating'   => round((float) ($visible->avg('overall_rating') ?? 0.0), 2),
-            'rating_count' => $visible->count(),
-        ]);
-    }
-
-    public function patient(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Appointment::class);
     }
 
     public function doctor(): BelongsTo
@@ -56,8 +37,8 @@ class Review extends Model
         return $this->belongsTo(Doctor::class);
     }
 
-    public function appointment(): BelongsTo
+    public function patient(): BelongsTo
     {
-        return $this->belongsTo(Appointment::class);
+        return $this->belongsTo(User::class, 'patient_id');
     }
 }
