@@ -45,7 +45,7 @@ class AppointmentController extends Controller
             : Doctor::where('slug', $doctor)->orWhere('id', $doctor)->first();
 
         if (!$doc) {
-            $doc = Doctor::firstOrFail();
+            abort(404, 'Doctor not found.');
         }
 
         $date = $request->query('date', now()->toDateString());
