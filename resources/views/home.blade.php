@@ -37,8 +37,8 @@
                 </div>
 
                 <p class="mt-8 text-sm text-muted">
-                    Trusted by <span class="font-semibold text-ink">{{ number_format($stats['doctors']) }}+</span> specialists and
-                    <span class="font-semibold text-ink">{{ number_format($stats['patients']) }}+</span> patients.
+                    Trusted by <span class="font-semibold text-ink">{{ number_format($stats['doctors'] ?? 0) }}+</span> specialists and
+                    <span class="font-semibold text-ink">{{ number_format($stats['patients'] ?? 0) }}+</span> patients.
                 </p>
             </div>
 
@@ -78,7 +78,7 @@
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h4a2 2 0 012 2v12H6a2 2 0 01-2-2V6zm12 0h4a2 2 0 012 2v12h-4a2 2 0 01-2-2V8a2 2 0 011-2zM2 4a2 2 0 012-2h16a2 2 0 012 2v2H2V4z"/></svg>
                 </span>
                 <div>
-                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['departments']) }}</p>
+                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['departments'] ?? 0) }}</p>
                     <p class="text-xs font-medium uppercase tracking-wider text-muted">Departments</p>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-4.6 12.3c.3.3.5.7.6 1.1l.5 2.6c.1.6.6 1.1 1.3 1.1h4.4c.7 0 1.2-.5 1.3-1.1l.5-2.6c.1-.4.3-.8.6-1.1A7 7 0 0012 2zm-1.5 6.5h3a1 1 0 010 2h-1v1a1 1 0 01-2 0v-1h-1a1 1 0 010-2h1v-1z"/></svg>
                 </span>
                 <div>
-                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['doctors']) }}</p>
+                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['doctors'] ?? 0) }}</p>
                     <p class="text-xs font-medium uppercase tracking-wider text-muted">Specialists</p>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                 </span>
                 <div>
-                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['patients']) }}</p>
+                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['patients'] ?? 0) }}</p>
                     <p class="text-xs font-medium uppercase tracking-wider text-muted">Patients</p>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22l-1.4-1.4C5.4 15.9 2 12.8 2 9 2 6 4.4 3.7 7.3 3.7c1.7 0 3.3.8 4.7 2.2 1.4-1.4 3-2.2 4.7-2.2 2.9 0 5.3 2.3 5.3 5.3 0 3.8-3.4 6.9-8.6 11.6L12 22z"/></svg>
                 </span>
                 <div>
-                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['appointments']) }}</p>
+                    <p class="text-2xl font-extrabold tracking-tight text-ink">{{ number_format($stats['appointments'] ?? 0) }}</p>
                     <p class="text-xs font-medium uppercase tracking-wider text-muted">Appointments</p>
                 </div>
             </div>
@@ -116,7 +116,7 @@
     </section>
 
     {{-- DEPARTMENTS PREVIEW --}}
-    @if ($departments->count())
+    @if (isset($departments) && $departments->count())
         <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-end justify-between gap-4">
                 <div>
@@ -155,7 +155,7 @@
     @endif
 
     {{-- DOCTORS PREVIEW --}}
-    @if ($doctors->count())
+    @if (isset($doctors) && $doctors->count())
         <section class="border-y border-brand-100 bg-surface">
             <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
                 <div class="flex flex-wrap items-end justify-between gap-4">
