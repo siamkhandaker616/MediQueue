@@ -3,7 +3,11 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Patient\MedicalProfileController;
+use App\Http\Controllers\Patient\MedicalReportController;
+use App\Http\Controllers\Patient\PrescriptionController;
+use App\Http\Controllers\Patient\ReviewController;
+use App\Http\Controllers\Patient\VisitHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -12,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 /*                                Public Routes                               */
 /* -------------------------------------------------------------------------- */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return view('home');
+})->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +57,7 @@ Route::post('/appointments/{appointment}/payment', [PaymentController::class, 'p
 Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
 
 /* -------------------------------------------------------------------------- */
-/*                             Authenticated Routes                           */
+/*                        Patient Portal Authenticated Routes                 */
 /* -------------------------------------------------------------------------- */
 
 Route::get('/dashboard', function () {
@@ -60,12 +66,33 @@ Route::get('/dashboard', function () {
     return match ($user->role) {
         'doctor' => redirect()->route('doctor.dashboard'),
         'admin'  => redirect()->route('admin.dashboard'),
-        default  => redirect()->route('patient.dashboard'),
+        default  => redirect()->route('patient.history'),
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    // FR-11: Visit History
+    Route::get('/patient/history', [VisitHistoryController::class, 'index'])->name('patient.history');
+    Route::get('/appointments', [VisitHistoryController::class, 'index'])->name('appointments.index');
+
+    // FR-12: Medical Reports
+    Route::get('/patient/reports', [MedicalReportController::class, 'index'])->name('patient.reports.index');
+    Route::post('/patient/reports', [MedicalReportController::class, 'store'])->name('patient.reports.store');
+    Route::delete('/patient/reports/{report}', [MedicalReportController::class, 'destroy'])->name('patient.reports.destroy');
+
+    // FR-13: Allergy & Medical Profile
+    Route::get('/patient/medical-profile', [MedicalProfileController::class, 'edit'])->name('patient.medical-profile.edit');
+    Route::post('/patient/medical-profile', [MedicalProfileController::class, 'update'])->name('patient.medical-profile.update');
+
+    // FR-18: Digital Prescriptions
+    Route::get('/patient/prescriptions', [PrescriptionController::class, 'index'])->name('patient.prescriptions.index');
+    Route::get('/patient/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('patient.prescriptions.show');
+
+    // FR-19: Doctor Reviews
+    Route::get('/patient/appointments/{appointment}/review', [ReviewController::class, 'create'])->name('patient.reviews.create');
+    Route::post('/patient/appointments/{appointment}/review', [ReviewController::class, 'store'])->name('patient.reviews.store');
+
+    // Profile settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
