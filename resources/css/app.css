@@ -4,20 +4,20 @@
 
 /*
     MediQueue design tokens.
-    Two palettes, selected by <html data-theme="...">:
-      :root              -> "Blush & Mint" (default)
-      [data-theme=soft]  -> "Softer muted pink"
+    :root                -> "Light" default (blush & mint)
+    [data-theme="dark"]  -> matching dark palette
     Values are space-separated RGB triplets consumed by Tailwind
     via rgb(var(--token) / <alpha-value>).
 */
 
 :root {
-    --canvas: 252 246 249;
-    --surface: 255 255 255;
+    --canvas: 247 231 239;
+    --surface: 250 232 238;
+    --surface-alt: 243 222 231;
     --ink: 63 52 56;
     --muted: 130 116 123;
 
-    --brand-50: 255 245 248;
+    --brand-50:  247 227 233;
     --brand-100: 251 225 234;
     --brand-200: 247 201 218;
     --brand-300: 240 169 196;
@@ -33,29 +33,35 @@
     --accent-500: 95 185 164;
     --accent-600: 74 158 139;
     --accent-700: 58 131 115;
+
+    --ecg-stroke: #7fd1bb;
 }
 
-[data-theme="soft"] {
-    --canvas: 253 244 248;
-    --ink: 74 58 66;
-    --muted: 148 130 140;
+[data-theme="dark"] {
+    --canvas: 23 19 22;
+    --surface: 34 29 32;
+    --surface-alt: 42 36 40;
+    --ink: 242 237 240;
+    --muted: 170 157 164;
 
-    --brand-50: 253 242 247;
-    --brand-100: 248 226 236;
-    --brand-200: 250 214 228;
-    --brand-300: 243 189 213;
-    --brand-400: 222 161 190;
-    --brand-500: 201 134 159;
-    --brand-600: 176 111 139;
-    --brand-700: 149 89 122;
+    --brand-50: 52 30 40;
+    --brand-100: 74 44 58;
+    --brand-200: 102 62 82;
+    --brand-300: 140 84 110;
+    --brand-400: 178 100 136;
+    --brand-500: 206 124 158;
+    --brand-600: 220 148 176;
+    --brand-700: 233 176 199;
 
-    --accent-100: 238 243 234;
-    --accent-200: 214 228 203;
-    --accent-300: 198 214 184;
-    --accent-400: 174 197 156;
-    --accent-500: 147 175 130;
-    --accent-600: 122 151 107;
-    --accent-700: 99 124 86;
+    --accent-100: 26 46 42;
+    --accent-200: 34 64 58;
+    --accent-300: 46 88 80;
+    --accent-400: 60 112 102;
+    --accent-500: 82 144 132;
+    --accent-600: 110 172 159;
+    --accent-700: 142 200 188;
+
+    --ecg-stroke: #2f665b;
 }
 
 @layer base {
@@ -101,3 +107,5 @@
         @apply px-4 py-3 text-sm text-ink;
     }
 }
+
+

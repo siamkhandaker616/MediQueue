@@ -5,22 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Prescription extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'appointment_id', 'doctor_id', 'patient_id', 'diagnosis', 'investigation',
-        'follow_up_date', 'dietary_advice', 'doctor_notes', 'is_editable',
+        'appointment_id',
+        'doctor_id',
+        'patient_id',
+        'diagnosis',
+        'symptoms',
+        'medicines',
+        'tests_recommended',
+        'advice',
+        'follow_up_date',
     ];
 
     protected function casts(): array
     {
         return [
-            'follow_up_date' => 'date',
-            'is_editable' => 'boolean',
+            'medicines'         => 'array',
+            'tests_recommended' => 'array',
+            'follow_up_date'    => 'date',
         ];
     }
 
@@ -39,8 +46,8 @@ class Prescription extends Model
         return $this->belongsTo(User::class, 'patient_id');
     }
 
-    public function items(): HasMany
+    public function getPrescriptionNumberAttribute(): string
     {
-        return $this->hasMany(PrescriptionItem::class);
+        return 'RX-' . date('Y') . '-' . str_pad((string) $this->id, 5, '0', STR_PAD_LEFT);
     }
 }

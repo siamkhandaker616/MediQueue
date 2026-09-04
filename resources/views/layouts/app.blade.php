@@ -7,6 +7,8 @@
 
         <title>{{ config('app.name', 'MediQueue') }}</title>
 
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -14,7 +16,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" x-data="themeSwitcher()">
         <div class="min-h-screen bg-canvas">
             @auth
                 @include('layouts.navigation')

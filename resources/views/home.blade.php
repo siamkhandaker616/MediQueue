@@ -1,5 +1,5 @@
 <x-layouts.landing>
-    <x-slot name="title">Skip the waiting room — book, pay, and track your visit</x-slot>
+    <x-slot name="title">Book appointments, skip the wait, and track your visit live</x-slot>
 
     {{-- HERO --}}
     <section class="relative overflow-hidden bg-gradient-to-b from-brand-50 via-canvas to-canvas">

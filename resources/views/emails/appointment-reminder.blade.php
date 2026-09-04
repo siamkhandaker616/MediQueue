@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body style="margin:0; padding:24px; background:#fcf6f9; font-family: Arial, sans-serif; color:#3f3438;">
-    <div style="max-width:560px; margin:0 auto; background:#ffffff; border:1px solid #fbe1ea; border-radius:16px; overflow:hidden;">
+    <div style="max-width:560px; margin:0 auto; background:#fae8ee; border:1px solid #fbe1ea; border-radius:16px; overflow:hidden;">
         <div style="background:linear-gradient(135deg, #e684ac, #c34b79); padding:20px 28px;">
             <h1 style="margin:0; font-size:20px; color:#ffffff;">MediQueue — Appointment Reminder</h1>
         </div>
