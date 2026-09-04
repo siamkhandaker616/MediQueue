@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.landing>
 <div class="max-w-6xl mx-auto px-4 py-8" x-data="departmentCatalogue()">
 
     <div class="mb-8">
@@ -40,4 +40,4 @@ function departmentCatalogue() {
     }
 }
 </script>
-</x-app-layout>
+</x-layouts.landing>

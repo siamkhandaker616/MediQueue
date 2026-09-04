@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.landing>
 <div class="max-w-6xl mx-auto px-4 py-8" x-data="doctorDirectory()">
 
     <div class="mb-8">
@@ -57,4 +57,4 @@ function doctorDirectory() {
     }
 }
 </script>
-</x-app-layout>
+</x-layouts.landing>

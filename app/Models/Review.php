@@ -14,16 +14,22 @@ class Review extends Model
         'appointment_id',
         'doctor_id',
         'patient_id',
-        'rating',
+        'punctuality_rating',
+        'communication_rating',
+        'knowledge_rating',
+        'overall_rating',
         'comment',
-        'is_anonymous',
+        'is_visible',
     ];
 
     protected function casts(): array
     {
         return [
-            'rating'       => 'integer',
-            'is_anonymous' => 'boolean',
+            'punctuality_rating' => 'integer',
+            'communication_rating' => 'integer',
+            'knowledge_rating'   => 'integer',
+            'overall_rating'     => 'integer',
+            'is_visible'         => 'boolean',
         ];
     }
 
