@@ -116,6 +116,8 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
+        abort_unless($appointment->patient_id === auth()->id(), 403);
+
         $appointment->load(['doctor.user', 'department', 'patient', 'payment']);
 
         return view('appointments.show', compact('appointment'));

@@ -3,12 +3,14 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\MedicalProfileController;
 use App\Http\Controllers\Patient\MedicalReportController;
 use App\Http\Controllers\Patient\PrescriptionController;
 use App\Http\Controllers\Patient\ReviewController;
 use App\Http\Controllers\Patient\VisitHistoryController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentReceiptController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SSLCommerzPaymentController;
 use Illuminate\Support\Facades\Route;
@@ -17,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 /*                                Public Routes                               */
 /* -------------------------------------------------------------------------- */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +56,7 @@ Route::get('/api/doctors/{doctor}/available-slots', [AppointmentController::clas
 Route::get('/appointments/{appointment}/payment', [PaymentController::class, 'checkout'])->name('payments.checkout');
 Route::post('/appointments/{appointment}/payment', [PaymentController::class, 'process'])->name('payments.process');
 Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+Route::get('/payments/{payment}/receipt/pdf', [PaymentReceiptController::class, 'show'])->name('payments.receipt.pdf');
 
 // SSLCommerz Official Gateway Endpoints & Callbacks
 Route::post('/sslcommerz/pay/{appointment}', [SSLCommerzPaymentController::class, 'pay'])->name('sslcommerz.pay');
@@ -78,7 +79,7 @@ Route::get('/dashboard', function () {
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // FR-11: Visit History
     Route::get('/patient/history', [VisitHistoryController::class, 'index'])->name('patient.history');
     Route::get('/appointments', [VisitHistoryController::class, 'index'])->name('appointments.index');
