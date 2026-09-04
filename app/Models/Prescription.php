@@ -41,6 +41,32 @@ class Prescription extends Model
         return $this->hasMany(PrescriptionItem::class);
     }
 
+    public function getSymptomsAttribute(): ?string
+    {
+        return $this->attributes['diagnosis'] ?? null;
+    }
+
+    public function getMedicinesAttribute(): array
+    {
+        return $this->items->map(fn (PrescriptionItem $item) => [
+            'name'         => $item->medication_name,
+            'dosage'       => $item->dosage,
+            'frequency'    => $item->frequency,
+            'duration'     => $item->duration,
+            'instructions' => $item->instructions,
+        ])->toArray();
+    }
+
+    public function getTestsRecommendedAttribute(): ?string
+    {
+        return $this->attributes['investigation'] ?? null;
+    }
+
+    public function getAdviceAttribute(): ?string
+    {
+        return $this->attributes['dietary_advice'] ?? null;
+    }
+
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
