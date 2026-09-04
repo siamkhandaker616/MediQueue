@@ -34,8 +34,12 @@ class SSLCommerzPaymentController extends Controller
         $payment = Payment::updateOrCreate(
             ['appointment_id' => $appointment->id],
             [
+                'patient_id'       => $appointment->patient_id,
                 'amount'           => $total,
-                'method'           => $validated['gateway'] === 'all' ? 'SSLCommerz' : strtoupper($validated['gateway']),
+                'service_fee'      => $serviceFee,
+                'vat_amount'       => $vat,
+                'total_paid'       => $total,
+                'method'           => $validated['gateway'] === 'all' ? 'sslcommerz' : strtolower($validated['gateway']),
                 'transaction_id'   => Payment::generateTransactionId(),
                 'status'           => Payment::STATUS_PENDING,
             ]
@@ -88,6 +92,7 @@ class SSLCommerzPaymentController extends Controller
     public function fail(Request $request)
     {
         $tranId = $request->input('tran_id');
+        $payment = null;
         if ($tranId) {
             $payment = Payment::where('transaction_id', $tranId)->first();
             if ($payment) {
@@ -95,7 +100,12 @@ class SSLCommerzPaymentController extends Controller
             }
         }
 
-        return redirect()->route('payments.checkout', $payment->appointment ?? 1)
+        if ($payment && $payment->appointment) {
+            return redirect()->route('payments.checkout', $payment->appointment)
+                ->withErrors(['payment' => 'SSLCommerz transaction failed. Please try another payment method.']);
+        }
+
+        return redirect()->route('patient.history')
             ->withErrors(['payment' => 'SSLCommerz transaction failed. Please try another payment method.']);
     }
 

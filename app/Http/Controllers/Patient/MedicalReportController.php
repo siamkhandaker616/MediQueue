@@ -51,15 +51,12 @@ class MedicalReportController extends Controller
         MedicalReport::create([
             'patient_id'     => auth()->id() ?? 1,
             'appointment_id' => $request->appointment_id,
-            'title'          => $request->title,
             'report_type'    => $request->report_type,
             'file_path'      => $filePath,
             'file_name'      => $originalName,
             'file_size'      => $file->getSize(),
-            'mime_type'      => $file->getClientMimeType(),
+            'file_type'      => $file->getClientMimeType(),
             'report_date'    => $request->report_date ?? now()->toDateString(),
-            'notes'          => $request->notes,
-            'status'         => 'uploaded',
         ]);
 
         return back()->with('success', 'Medical report uploaded successfully!');

@@ -32,7 +32,7 @@ class SSLCommerzService
         $postData = [
             'store_id'         => $this->storeId,
             'store_passwd'     => $this->storePassword,
-            'total_amount'     => (float) $payment->total_paid,
+            'total_amount'     => (float) ($payment->total_paid ?: $payment->amount),
             'currency'         => 'BDT',
             'tran_id'          => $payment->transaction_id,
             'success_url'      => url(config('sslcommerz.success_url')),
@@ -46,7 +46,7 @@ class SSLCommerzService
             'cus_add1'         => 'Dhaka, Bangladesh',
             'cus_city'         => 'Dhaka',
             'cus_country'      => 'Bangladesh',
-            'cus_phone'        => $patient->phone ?? '01700000000',
+            'cus_phone'        => $patient->phone ?? optional($patient->medicalProfile)->emergency_contact_phone ?? '01700000000',
 
             # Shipment / Service Info
             'shipping_method'  => 'NO',
