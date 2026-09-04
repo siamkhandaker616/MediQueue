@@ -14,20 +14,13 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    /* -------------------------------------------------------------------------- */
-    /*                              Status Constants                              */
-    /* -------------------------------------------------------------------------- */
-
-    public const STATUS_SCHEDULED = 'scheduled';
-    public const STATUS_CHECKED_IN = 'checked_in';
+    public const STATUS_SCHEDULED   = 'scheduled';
+    public const STATUS_CHECKED_IN  = 'checked_in';
     public const STATUS_IN_PROGRESS = 'in_progress';
-    public const STATUS_COMPLETED = 'completed';
-    public const STATUS_CANCELLED = 'cancelled';
-    public const STATUS_NO_SHOW = 'no_show';
-
-    /* -------------------------------------------------------------------------- */
-    /*                                Mass Assignment                             */
-    /* -------------------------------------------------------------------------- */
+    public const STATUS_COMPLETED   = 'completed';
+    public const STATUS_CANCELLED   = 'cancelled';
+    public const STATUS_NO_SHOW     = 'no_show';
+    public const STATUS_RESCHEDULED = 'rescheduled';
 
     protected $fillable = [
         'patient_id',
@@ -96,12 +89,9 @@ class Appointment extends Model
     }
 
     /* -------------------------------------------------------------------------- */
-    /*                         Queue & Token Accessors (FR-04)                    */
+    /*                         Queue & Helper Methods                             */
     /* -------------------------------------------------------------------------- */
 
-    /**
-     * Dynamic queue position based on date and time_slot order.
-     */
     public function getQueuePositionAttribute(): int
     {
         if (isset($this->attributes['queue_position']) && $this->attributes['queue_position'] > 0) {
@@ -116,9 +106,6 @@ class Appointment extends Model
             ->count();
     }
 
-    /**
-     * Dynamic unique token code (e.g. CARD-0004 or stored token_number).
-     */
     public function getTokenNumberAttribute(): string
     {
         if (!empty($this->attributes['token_number'])) {
@@ -128,9 +115,6 @@ class Appointment extends Model
         return strtoupper(substr($this->department->slug ?? 'DEPT', 0, 4)) . '-' . str_pad((string) $this->id, 4, '0', STR_PAD_LEFT);
     }
 
-    /**
-     * Estimated wait time in minutes (~15 min per patient ahead in queue).
-     */
     public function getEstimatedWaitMinutesAttribute(): int
     {
         if (isset($this->attributes['estimated_wait_minutes']) && $this->attributes['estimated_wait_minutes'] > 0) {
@@ -139,6 +123,17 @@ class Appointment extends Model
 
         $pos = $this->queue_position;
         return $pos > 1 ? ($pos - 1) * 15 : 0;
+    }
+
+    public function canBeRescheduled(): bool
+    {
+        return in_array($this->status, [self::STATUS_SCHEDULED, self::STATUS_CHECKED_IN])
+            && ($this->date instanceof Carbon ? ($this->date->isFuture() || $this->date->isToday()) : true);
+    }
+
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, [self::STATUS_SCHEDULED, self::STATUS_CHECKED_IN]);
     }
 
     /* -------------------------------------------------------------------------- */

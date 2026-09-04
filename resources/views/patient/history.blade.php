@@ -7,9 +7,12 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
             <h1 class="text-3xl font-black text-ink tracking-tight">My Visit History</h1>
-            <p class="text-muted text-sm mt-1">Review your past consultations, upcoming appointments, and medical tokens.</p>
+            <p class="text-muted text-sm mt-1">Review your past consultations, upcoming appointments, prescriptions, and medical tokens.</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ route('patient.prescriptions.index') }}" class="bg-surface border border-brand-200 text-ink hover:border-brand-500 px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2">
+                <i class="fa-solid fa-file-prescription text-emerald-600"></i> Prescriptions
+            </a>
             <a href="{{ route('patient.medical-profile.edit') }}" class="bg-surface border border-brand-200 text-ink hover:border-brand-500 px-4 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2">
                 <i class="fa-solid fa-heart-pulse text-rose-500"></i> Medical Profile
             </a>
@@ -21,6 +24,18 @@
             </a>
         </div>
     </div>
+
+    @if (session('success'))
+        <div class="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 text-center font-medium text-sm">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('info'))
+        <div class="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-700 text-center font-medium text-sm">
+            {{ session('info') }}
+        </div>
+    @endif
 
     <!-- Status Tabs -->
     <div class="flex border-b border-brand-100 mb-6 gap-2 sm:gap-6 overflow-x-auto text-sm font-medium">
@@ -79,20 +94,40 @@
                     <!-- Actions -->
                     <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end border-t md:border-t-0 pt-3 md:pt-0 border-brand-100">
                         <!-- Token View -->
-                        <a href="{{ route('appointments.show', $apt) }}" class="bg-surface-alt hover:bg-brand-50 border border-brand-100 text-ink hover:text-brand-700 px-4 py-2 rounded-xl text-xs font-semibold transition">
-                            View Token
+                        <a href="{{ route('appointments.show', $apt) }}" class="bg-surface-alt hover:bg-brand-50 border border-brand-100 text-ink hover:text-brand-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition">
+                            Token
                         </a>
+
+                        <!-- FR-18: View Prescription (if completed & has prescription) -->
+                        @if ($apt->status === 'completed' && $apt->prescription)
+                            <a href="{{ route('patient.prescriptions.show', $apt->prescription) }}" class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 hover:bg-emerald-500/20 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-solid fa-file-prescription"></i> Prescription
+                            </a>
+                        @endif
+
+                        <!-- FR-19: Rate Doctor (if completed) -->
+                        @if ($apt->status === 'completed')
+                            @if ($apt->review)
+                                <span class="bg-amber-500/10 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold">
+                                    ★ {{ $apt->review->rating }}/5 Rated
+                                </span>
+                            @else
+                                <a href="{{ route('patient.reviews.create', $apt) }}" class="bg-amber-500/10 border border-amber-500/20 text-amber-700 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                                    ★ Rate Doctor
+                                </a>
+                            @endif
+                        @endif
 
                         <!-- Reschedule Button (if upcoming) -->
                         @if ($apt->canBeRescheduled())
-                            <a href="{{ route('appointments.reschedule', $apt) }}" class="bg-surface hover:bg-brand-50 border border-brand-200 text-ink px-4 py-2 rounded-xl text-xs font-semibold transition">
+                            <a href="{{ route('appointments.reschedule', $apt) }}" class="bg-surface hover:bg-brand-50 border border-brand-200 text-ink px-3.5 py-2 rounded-xl text-xs font-semibold transition">
                                 Reschedule
                             </a>
                         @endif
 
                         <!-- Receipt Button -->
                         @if ($apt->payment)
-                            <a href="{{ route('payments.receipt', $apt->payment) }}" class="bg-brand-50 text-brand-700 px-4 py-2 rounded-xl text-xs font-semibold hover:bg-brand-100 transition">
+                            <a href="{{ route('payments.receipt', $apt->payment) }}" class="bg-brand-50 text-brand-700 px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-brand-100 transition">
                                 Receipt
                             </a>
                         @endif
