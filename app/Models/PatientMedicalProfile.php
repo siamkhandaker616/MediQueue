@@ -13,21 +13,23 @@ class PatientMedicalProfile extends Model
     protected $fillable = [
         'patient_id',
         'blood_type',
+        'blood_group',
         'allergies',
         'chronic_conditions',
         'current_medications',
         'emergency_contact',
         'additional_notes',
+        'notes',
         'last_updated',
     ];
 
     protected function casts(): array
     {
         return [
-            'allergies'           => 'array',
-            'chronic_conditions'  => 'array',
-            'current_medications' => 'array',
-            'emergency_contact'   => 'array',
+            'allergies'           => 'encrypted:array',
+            'chronic_conditions'  => 'encrypted:array',
+            'current_medications' => 'encrypted:array',
+            'emergency_contact'   => 'encrypted:array',
             'last_updated'        => 'datetime',
         ];
     }
@@ -37,9 +39,17 @@ class PatientMedicalProfile extends Model
         return $this->belongsTo(User::class, 'patient_id');
     }
 
-    // Helper for blood group display
+    /**
+     * Helper accessor to support both blood_type and blood_group
+     */
     public function getBloodGroupAttribute(): ?string
     {
-        return $this->blood_type;
+        return $this->attributes['blood_type'] ?? $this->attributes['blood_group'] ?? null;
+    }
+
+    public function setBloodGroupAttribute($value): void
+    {
+        $this->attributes['blood_type'] = $value;
+        $this->attributes['blood_group'] = $value;
     }
 }

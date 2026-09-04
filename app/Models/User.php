@@ -67,6 +67,11 @@ class User extends Authenticatable
         return $this->hasMany(Appointment::class, 'patient_id');
     }
 
+    public function medicalReports(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MedicalReport::class, 'patient_id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *

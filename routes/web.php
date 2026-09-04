@@ -5,6 +5,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Patient\MedicalProfileController;
 use App\Http\Controllers\Patient\MedicalReportController;
+use App\Http\Controllers\Patient\PrescriptionController;
+use App\Http\Controllers\Patient\ReviewController;
 use App\Http\Controllers\Patient\VisitHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -81,6 +83,14 @@ Route::middleware('auth')->group(function () {
     // FR-13: Allergy & Medical Profile
     Route::get('/patient/medical-profile', [MedicalProfileController::class, 'edit'])->name('patient.medical-profile.edit');
     Route::post('/patient/medical-profile', [MedicalProfileController::class, 'update'])->name('patient.medical-profile.update');
+
+    // FR-18: Digital Prescriptions
+    Route::get('/patient/prescriptions', [PrescriptionController::class, 'index'])->name('patient.prescriptions.index');
+    Route::get('/patient/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('patient.prescriptions.show');
+
+    // FR-19: Doctor Reviews
+    Route::get('/patient/appointments/{appointment}/review', [ReviewController::class, 'create'])->name('patient.reviews.create');
+    Route::post('/patient/appointments/{appointment}/review', [ReviewController::class, 'store'])->name('patient.reviews.store');
 
     // Profile settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
