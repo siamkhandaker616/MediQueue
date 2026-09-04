@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\MedicalProfileController;
 use App\Http\Controllers\Patient\MedicalReportController;
 use App\Http\Controllers\Patient\PrescriptionController;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 /*                                Public Routes                               */
 /* -------------------------------------------------------------------------- */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
