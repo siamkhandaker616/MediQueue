@@ -100,7 +100,7 @@ class MedicationTrackerController extends Controller
             ->with('items')
             ->get();
 
-        $allItemIds = $prescriptions->flatMap->pluck('id')->unique();
+        $allItemIds = $prescriptions->flatMap(fn ($rx) => $rx->items->pluck('id'))->unique();
 
         $logs = MedicationLog::where('user_id', $patientId)
             ->whereBetween('scheduled_date', [$start, $end])

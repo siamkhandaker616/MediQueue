@@ -109,7 +109,7 @@
                         @if ($apt->status === 'completed')
                             @if ($apt->review)
                                 <span class="bg-amber-500/10 text-amber-700 px-3 py-1.5 rounded-xl text-xs font-bold">
-                                    ★ {{ $apt->review->rating }}/5 Rated
+                                    ★ {{ $apt->review->overall_rating ?? $apt->review->rating }}/5 Rated
                                 </span>
                             @else
                                 <a href="{{ route('patient.reviews.create', $apt) }}" class="bg-amber-500/10 border border-amber-500/20 text-amber-700 hover:bg-amber-500/20 px-3.5 py-2 rounded-xl text-xs font-bold transition">

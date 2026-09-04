@@ -20,7 +20,7 @@ Route::middleware('role:admin')->group(function () {
     Route::post('/payments/{payment}/refund', [RefundController::class, 'refund'])->name('payments.refund');
     Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
     Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
-    Route::put('/departments/{department:id}', [DepartmentController::class, 'update'])->name('departments.update');
+    Route::patch('/departments/{department:id}', [DepartmentController::class, 'update'])->name('departments.update');
     Route::delete('/departments/{department:id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
     Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
     Route::get('/doctors/create', [DoctorController::class, 'create'])->name('doctors.create');

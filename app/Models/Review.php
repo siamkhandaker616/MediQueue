@@ -11,19 +11,25 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
-        'appointment_id',
-        'doctor_id',
         'patient_id',
-        'rating',
+        'doctor_id',
+        'appointment_id',
+        'punctuality_rating',
+        'communication_rating',
+        'knowledge_rating',
+        'overall_rating',
         'comment',
-        'is_anonymous',
+        'is_visible',
     ];
 
     protected function casts(): array
     {
         return [
-            'rating'       => 'integer',
-            'is_anonymous' => 'boolean',
+            'punctuality_rating'   => 'integer',
+            'communication_rating' => 'integer',
+            'knowledge_rating'     => 'integer',
+            'overall_rating'       => 'integer',
+            'is_visible'           => 'boolean',
         ];
     }
 
@@ -40,5 +46,10 @@ class Review extends Model
     public function patient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'patient_id');
+    }
+
+    public function getRatingAttribute(): ?int
+    {
+        return $this->overall_rating;
     }
 }

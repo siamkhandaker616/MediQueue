@@ -30,11 +30,10 @@
             <div class="text-center text-xs font-bold text-muted pb-1">{{ $dayLabel }}</div>
         @endforeach
 
-        @php
-            $firstDayOfWeek = $start->dayOfWeek;
-            for ($i = 0; $i < $firstDayOfWeek; $i++)
-                echo '<div></div>';
-        @endphp
+        {{-- Output empty cells before the start day of week for correct calendar alignment --}}
+        @for ($i = 0; $i < $start->dayOfWeek; $i++)
+            <div></div>
+        @endfor
 
         @foreach ($days as $day)
             @php

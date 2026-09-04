@@ -158,6 +158,11 @@ class Doctor extends Model
     /*                                Helper Methods                              */
     /* -------------------------------------------------------------------------- */
 
+    public function getDisplayNameAttribute(): ?string
+    {
+        return $this->name ?? $this->user?->name;
+    }
+
     public function photoUrl(): string
     {
         return $this->photo
