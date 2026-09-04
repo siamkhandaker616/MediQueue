@@ -162,7 +162,7 @@
                 @else
                     <p class="mt-3 text-sm text-muted">Queue is clear.</p>
                 @endif
-                <p class="mt-4 text-xs text-muted">FR-18 · queue position alerts fire as patients approach their turn.</p>
+                <p class="mt-4 text-xs text-muted">Queue position alerts automatically notify patients as their turn approaches.</p>
             </div>
         </div>
     </div>
