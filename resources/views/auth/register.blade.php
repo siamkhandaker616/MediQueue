@@ -51,13 +51,13 @@
     </form>
 
     <div class="mt-4 flex items-center">
-        <div class="flex-1 border-t border-gray-300"></div>
-        <span class="px-3 text-sm text-gray-500">{{ __('or') }}</span>
-        <div class="flex-1 border-t border-gray-300"></div>
+        <div class="flex-1 border-t border-brand-200"></div>
+        <span class="px-3 text-sm text-muted">{{ __('or') }}</span>
+        <div class="flex-1 border-t border-brand-200"></div>
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('google.redirect') }}" class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50">
+        <a href="{{ route('google.redirect') }}" class="flex w-full items-center justify-center rounded-md border border-brand-200 bg-surface px-4 py-2 text-sm font-medium text-ink shadow-sm transition hover:bg-brand-50">
             <svg class="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none">
                 <path d="M23.5 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47a5.58 5.58 0 0 1-2.42 3.66v3.04h3.92c2.29-2.1 3.53-5.2 3.53-8.94z" fill="#4285F4"/>
                 <path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.92-3.04c-1.09.73-2.48 1.17-4.01 1.17-3.08 0-5.69-2.08-6.62-4.88H1.3v3.14A12 12 0 0 0 12 24z" fill="#34A853"/>

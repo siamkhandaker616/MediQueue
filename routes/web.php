@@ -6,10 +6,12 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\MedicalProfileController;
 use App\Http\Controllers\Patient\MedicalReportController;
+use App\Http\Controllers\Patient\MedicationTrackerController;
 use App\Http\Controllers\Patient\PrescriptionController;
 use App\Http\Controllers\Patient\ReviewController;
 use App\Http\Controllers\Patient\VisitHistoryController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentReceiptController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SSLCommerzPaymentController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +57,7 @@ Route::get('/api/doctors/{doctor}/available-slots', [AppointmentController::clas
 Route::get('/appointments/{appointment}/payment', [PaymentController::class, 'checkout'])->name('payments.checkout');
 Route::post('/appointments/{appointment}/payment', [PaymentController::class, 'process'])->name('payments.process');
 Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+Route::get('/payments/{payment}/receipt/pdf', [PaymentReceiptController::class, 'show'])->name('payments.receipt.pdf');
 
 // SSLCommerz Official Gateway Endpoints & Callbacks
 Route::post('/sslcommerz/pay/{appointment}', [SSLCommerzPaymentController::class, 'pay'])->name('sslcommerz.pay');
@@ -77,7 +80,7 @@ Route::get('/dashboard', function () {
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // FR-11: Visit History
     Route::get('/patient/history', [VisitHistoryController::class, 'index'])->name('patient.history');
     Route::get('/appointments', [VisitHistoryController::class, 'index'])->name('appointments.index');
@@ -94,6 +97,11 @@ Route::middleware('auth')->group(function () {
     // FR-18: Digital Prescriptions
     Route::get('/patient/prescriptions', [PrescriptionController::class, 'index'])->name('patient.prescriptions.index');
     Route::get('/patient/prescriptions/{prescription}', [PrescriptionController::class, 'show'])->name('patient.prescriptions.show');
+
+    // FR-16: Medication Tracker
+    Route::get('/patient/medications', [MedicationTrackerController::class, 'index'])->name('patient.medications.index');
+    Route::post('/patient/medications/log', [MedicationTrackerController::class, 'log'])->name('patient.medications.log');
+    Route::get('/patient/medications/history', [MedicationTrackerController::class, 'history'])->name('patient.medications.history');
 
     // FR-19: Doctor Reviews
     Route::get('/patient/appointments/{appointment}/review', [ReviewController::class, 'create'])->name('patient.reviews.create');

@@ -7,8 +7,8 @@
             'checked_in' => 'bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200',
             'in_progress' => 'bg-accent-100 text-accent-700 ring-1 ring-inset ring-accent-200',
             'completed' => 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200',
-            'cancelled' => 'bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-200',
-            'no_show' => 'bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-200 line-through',
+            'cancelled' => 'bg-brand-50 text-muted ring-1 ring-inset ring-brand-200',
+            'no_show' => 'bg-brand-50 text-muted ring-1 ring-inset ring-brand-200 line-through',
         ];
     @endphp
 
