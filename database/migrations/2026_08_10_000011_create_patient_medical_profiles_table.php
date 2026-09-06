@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('patient_id')->unique()->constrained('users')->cascadeOnDelete();
             $table->string('blood_type')->nullable();
-            $table->json('allergies')->nullable();
-            $table->json('chronic_conditions')->nullable();
-            $table->json('current_medications')->nullable();
-            $table->json('emergency_contact')->nullable();
+            $table->text('allergies')->nullable();
+            $table->text('chronic_conditions')->nullable();
+            $table->text('current_medications')->nullable();
+            $table->text('emergency_contact')->nullable();
             $table->text('additional_notes')->nullable();
             $table->timestamp('last_updated')->nullable();
             $table->timestamps();

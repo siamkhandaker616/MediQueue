@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'prescription_item_id', 'scheduled_date', 'slot']);
+            $table->unique(['user_id', 'prescription_item_id', 'scheduled_date', 'slot'], 'med_log_unique');
             $table->index(['user_id', 'scheduled_date']);
         });
     }
