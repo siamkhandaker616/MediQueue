@@ -45,5 +45,35 @@
         </div>
     </div>
 
+    <div class="mt-6 bg-surface rounded-xl border border-brand-100 shadow-sm p-6">
+        <div class="flex items-center justify-between gap-3">
+            <h2 class="font-semibold text-ink">Patient reviews</h2>
+            <span class="text-sm font-bold text-amber-500">★ {{ number_format($doctor->avg_rating, 1) }}</span>
+        </div>
+
+        @php $publishedReviews = $doctor->reviews ?? collect(); @endphp
+
+        @if ($publishedReviews->isEmpty())
+            <p class="mt-3 text-sm text-muted">No published reviews yet.</p>
+        @else
+            <div class="mt-4 divide-y divide-brand-100">
+                @foreach ($publishedReviews as $review)
+                    <div class="py-4 first:pt-0 last:pb-0">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-amber-500">★ {{ $review->overall_rating }}/5</span>
+                                <span class="text-sm font-medium text-ink">{{ $review->reviewerName() }}</span>
+                            </div>
+                            <span class="text-xs text-muted">{{ $review->created_at->format('d M Y') }}</span>
+                        </div>
+                        @if ($review->comment)
+                            <p class="mt-2 text-sm text-muted">"{{ $review->comment }}"</p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+
 </div>
 </x-app-layout>

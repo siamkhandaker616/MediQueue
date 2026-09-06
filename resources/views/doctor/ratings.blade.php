@@ -40,7 +40,7 @@
                     <li class="px-5 py-4">
                         <div class="flex items-center justify-between gap-3">
                             <p class="text-sm font-semibold">
-                                {{ $review->patient?->name ?? 'Patient' }}
+                                {{ $review->reviewerName() }}
                                 <span class="ml-1.5 text-amber-500">★ {{ number_format($review->overall_rating, 1) }}</span>
                             </p>
                             <p class="text-xs text-muted">{{ $review->created_at->format('d M Y') }}</p>

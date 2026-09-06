@@ -20,6 +20,7 @@ class Review extends Model
         'overall_rating',
         'comment',
         'is_visible',
+        'is_anonymous',
     ];
 
     protected function casts(): array
@@ -30,6 +31,7 @@ class Review extends Model
             'knowledge_rating'     => 'integer',
             'overall_rating'       => 'integer',
             'is_visible'           => 'boolean',
+            'is_anonymous'         => 'boolean',
         ];
     }
 
@@ -51,5 +53,12 @@ class Review extends Model
     public function getRatingAttribute(): ?int
     {
         return $this->overall_rating;
+    }
+
+    public function reviewerName(): string
+    {
+        return $this->is_anonymous
+            ? 'Anonymous patient'
+            : (string) ($this->patient?->name ?: 'Patient');
     }
 }

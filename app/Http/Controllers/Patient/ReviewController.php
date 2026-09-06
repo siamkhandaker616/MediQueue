@@ -57,6 +57,7 @@ class ReviewController extends Controller
                 'knowledge_rating'     => $validated['rating'],
                 'comment'              => $validated['comment'] ?? null,
                 'is_visible'           => true,
+                'is_anonymous'         => $validated['is_anonymous'] ?? false,
             ]);
 
             // Recalculate doctor's overall average rating & total reviews

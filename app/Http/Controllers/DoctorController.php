@@ -40,7 +40,15 @@ class DoctorController extends Controller
     {
         abort_unless($doctor->is_active, 404);
 
-        $doctor->load(['user', 'department']);
+        $doctor->load([
+            'user',
+            'department',
+            'reviews' => fn ($query) => $query
+                ->where('is_visible', true)
+                ->with('patient')
+                ->latest()
+                ->limit(5),
+        ]);
 
         return view('doctors.show', compact('doctor'));
     }

@@ -22,7 +22,7 @@
                     <div class="flex flex-wrap items-start justify-between gap-3">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="font-semibold">{{ $review->patient->name }}</span>
+                                <span class="font-semibold">{{ $review->reviewerName() }}</span>
                                 <span class="text-sm text-muted">→ {{ $review->doctor->name }}</span>
                             </div>
                             <p class="text-xs text-muted">{{ $review->created_at->format('d M Y, g:i a') }}</p>
