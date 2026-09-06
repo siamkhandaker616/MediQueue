@@ -45,7 +45,8 @@ class DoctorSchedule extends Model
         // Check if doctor is on approved leave
         if (method_exists($doctor, 'leaves')) {
             $hasLeave = $doctor->leaves()
-                ->where('date', $dateString)
+                ->whereDate('date', $dateString)
+                ->where('status', \App\Models\DoctorLeave::STATUS_APPROVED)
                 ->exists();
 
             if ($hasLeave) {

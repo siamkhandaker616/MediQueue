@@ -10,7 +10,11 @@ class DoctorLeave extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_id', 'date', 'reason'];
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+
+    protected $fillable = ['doctor_id', 'date', 'reason', 'status'];
 
     protected function casts(): array
     {
@@ -20,5 +24,10 @@ class DoctorLeave extends Model
     public function doctor(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === self::STATUS_APPROVED;
     }
 }

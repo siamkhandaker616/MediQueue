@@ -18,7 +18,7 @@ class DoctorController extends Controller
 {
     public function index(): View
     {
-        $doctors = Doctor::with(['department', 'user'])
+        $doctors = Doctor::with(['department', 'user', 'leaves'])
             ->withCount('appointments')
             ->get()
             ->each(function (Doctor $doctor) {

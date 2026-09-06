@@ -91,7 +91,13 @@
                                     <p class="text-sm font-medium">{{ $leave->date->format('D, j M Y') }}</p>
                                     <p class="text-xs text-muted">{{ $leave->reason }}</p>
                                 </div>
-                                <span class="badge bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200">Requested</span>
+                                @if ($leave->isApproved())
+                                    <span class="badge bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200">Approved</span>
+                                @elseif ($leave->status === \App\Models\DoctorLeave::STATUS_REJECTED)
+                                    <span class="badge bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-200">Rejected</span>
+                                @else
+                                    <span class="badge bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200">Pending</span>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
